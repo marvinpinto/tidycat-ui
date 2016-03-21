@@ -27,6 +27,7 @@ install:  ## Install project dependencies
 
 .PHONY: server
 server:  ## Run the ember server locally
+	(command -v watchman >/dev/null 2>&1 && watchman watch-del `pwd` && watchman watch-project `pwd`) || true
 	ember server
 
 .PHONY: test
