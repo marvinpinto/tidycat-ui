@@ -2,4 +2,14 @@
   <h1>Welcome to Ember</h1>
 </div>
 
+{{#if session.isAuthenticated}}
+  <ul>
+    <li>Provider: {{session.data.authenticated.provider}}</li>
+    <li>GitHub token: {{session.data.authenticated.authorizationCode}}</li>
+  </ul>
+  <button {{action 'logout'}}>logout</button>
+{{else}}
+  <button {{action 'login'}}>login</button>
+{{/if}}
+
 {{outlet}}
