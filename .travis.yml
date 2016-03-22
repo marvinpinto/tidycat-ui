@@ -1,23 +1,35 @@
 ---
-language: node_js
+language: 'node_js'
 node_js:
-  - "0.12"
+  - "5.9.0"
 
 sudo: false
 
 cache:
   directories:
-    - node_modules
+    - 'node_modules'
+    - 'bower_components'
+    - 'travis-phantomjs'
 
 before_install:
-  - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
+  - "mkdir -p travis-phantomjs"
+  - '[ -f travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs ] || (wget --quiet -O $PWD/travis-phantomjs/phantomjs.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 && tar -xf $PWD/travis-phantomjs/phantomjs.tar.bz2 -C $PWD/travis-phantomjs && rm $PWD/travis-phantomjs/phantomjs.tar.bz2)'
+  - 'export PATH=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH'
   - "npm config set spin false"
   - "npm install -g npm@^2"
+  - "npm install -g ember-cli@2.4.2"
+  - "npm install -g bower@1.7.1"
 
 install:
-  - npm install -g bower
-  - npm install
-  - bower install
+  - "make install"
 
 script:
-  - npm test
+  - "make test"
+
+notifications:
+  email: false
+  irc:
+    channels:
+      - secure: "Z5V+fgvPZ2QcPBUSuSH7+a2g07DhK6LDepF0FPgwUWPqYouKbSNm9t0s/+UvTmKujPrZ0cLOL+1P74m3JSJFq1FIb7QiYpLI4hpvdR9nvLrGGthJ5FrohsdqKBjXrisRaCGq6an9V31fbKfF1JKqB6pTEslGxv/XkkRl+eEvbbHnCzmI9tksesOnIL63OAyBUMEQYLXaC6IAy6jkFxzZ42oyJB8PQO12019uQu4yz0LMe//OBK5RQJFZYboL4HC96i77s1zLFaS5nZ+ay4Qr8vy8w0Lwqi0JB/TzUQV5yvd+DpYrt9A29XqoGR+R6Mogzpg+jfS6WV1rgYmOtdKFonT66TmAU6CctZzJkXtLQljkiBmr74mXJKJMR3WVRcafGjclYj2RNej0AG3S29g8z0znrmO8dysDd7415tn8YVbDNka4YkcfmtdDAX0HSTgNEGGPd9M42ffY1Hv7lvwpKicMTyc7VqIWyXUOmFvTYEPEXtgyeYjSqolKNQ/yLkCFskUk3iOzNdE80PSQT6ejXlbv+CRoKBbdM94y20OcKz17H3tKsAC3oqwaPPrp4fTF/qOrtFKv6Y5zEyfCVTaja0+qVB0oOo79ulNQn+jSqDDfuu517xp9aW25F5hBjFTbLPfUxQ3RaQ+Po1lS4tbNI6L/ImaP7/mtvgLjH78VTng="
+    on_success: "change"
+    on_failure: "change"
