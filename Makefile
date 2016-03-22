@@ -30,6 +30,15 @@ server:  ## Run the ember server locally
 	(command -v watchman >/dev/null 2>&1 && watchman watch-del `pwd` && watchman watch-project `pwd`) || true
 	ember server
 
+.PHONY: eslint
+eslint:  ## Run eslint on the app + tests directories
+	@`npm bin`/eslint app/
+	@`npm bin`/eslint tests/
+
+.PHONY: unit-test
+unit-test:  ## Run the ember unit tests
+	@ember test
+
 .PHONY: test
-test:  ## Run all the unit tests
-	ember test
+test: eslint unit-test  ## Run all the style + unit tests
+	@echo "Tests look good!"
