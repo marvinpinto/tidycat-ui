@@ -26,6 +26,9 @@ install:
 script:
   - "make test"
 
+after_success:
+  - 'cat lcov.dat | `npm bin`/coveralls'
+
 notifications:
   email: false
   irc:
