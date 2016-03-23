@@ -19,6 +19,7 @@ clean-all: clean  ## Burn everything to the ground
 	rm -rf libpeerconnection.log
 	rm -rf npm-debug.log
 	rm -rf testem.log
+	rm -f lcov.dat
 
 .PHONY: install
 install:  ## Install project dependencies
