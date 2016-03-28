@@ -4,7 +4,7 @@ module.exports = function(environment) {
   // **********
   var ENV = {
     modulePrefix: 'tidycat-ui',
-    environment: environment,
+    environmen: environment,
     baseURL: '/',
     locationType: 'auto',
     EmberENV: {
@@ -23,7 +23,9 @@ module.exports = function(environment) {
       sessionServiceName: 'session',
       providers: {
         'github-oauth2': {
-          scope: 'user'
+          scope: 'user',
+          apiKey: process.env.EMBER_GITHUB_APIKEY,
+          redirectUri: process.env.EMBER_GITHUB_REDIRECT_URI
         }
       }
     },
@@ -38,7 +40,9 @@ module.exports = function(environment) {
       authorizationHeaderName: 'Authorization',
       refreshAccessTokens: true,
       refreshLeeway: 300,
-      timeFactor: 1000
+      timeFactor: 1000,
+      serverTokenEndpoint: process.env.EMBER_ESA_TOKEN_ENDPOINT,
+      serverTokenRefreshEndpoint: process.env.EMBER_ESA_REFRESH_ENDPOINT
     }
 
   };
@@ -52,36 +56,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.rootElement = '#ember-testing';
-  }
-
-  // *************
-  //  Development
-  // *************
-  if (environment === 'development') {
-    ENV.torii.providers['github-oauth2'].apiKey = 'a23e0b40bb0377aa6860';
-    ENV.torii.providers['github-oauth2'].redirectUri = 'http://127.0.0.1:4200';
-    ENV['ember-simple-auth-token'].serverTokenEndpoint = "http://127.0.0.1:8080/auth/token";
-    ENV['ember-simple-auth-token'].serverTokenRefreshEndpoint = "http://127.0.0.1:8080/auth/refresh";
-  }
-
-  // *********
-  //  Staging
-  // *********
-  if (environment === 'staging') {
-    ENV.torii.providers['github-oauth2'].apiKey = 'caf40f799d653c2ca635';
-    ENV.torii.providers['github-oauth2'].redirectUri = 'https://my-staging.tidycat.io';
-    ENV['ember-simple-auth-token'].serverTokenEndpoint = "https://api-staging.tidycat.io/auth/token";
-    ENV['ember-simple-auth-token'].serverTokenRefreshEndpoint = "https://api-staging.tidycat.io/auth/refresh";
-  }
-
-  // ************
-  //  Production
-  // ************
-  if (environment === 'production') {
-    ENV.torii.providers['github-oauth2'].apiKey = '89a218832dc2e39f575b';
-    ENV.torii.providers['github-oauth2'].redirectUri = 'https://my.tidycat.io';
-    ENV['ember-simple-auth-token'].serverTokenEndpoint = "https://api.tidycat.io/auth/token";
-    ENV['ember-simple-auth-token'].serverTokenRefreshEndpoint = "https://api.tidycat.io/auth/refresh";
   }
 
   return ENV;
