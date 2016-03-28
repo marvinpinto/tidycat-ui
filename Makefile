@@ -29,10 +29,13 @@ install:  ## Install project dependencies
 .PHONY: server
 server:  ## Run the ember server locally
 	(command -v watchman >/dev/null 2>&1 && watchman watch-del `pwd` && watchman watch-project `pwd`) || true
-	ember server
+	ember server \
+		--environment="development" \
+		--live-reload=false
 
 .PHONY: eslint
-eslint:  ## Run eslint on the app + tests directories
+eslint:  ## Run eslint on the relevant javascript files
+	@`npm bin`/eslint config/
 	@`npm bin`/eslint app/
 	@`npm bin`/eslint tests/
 
