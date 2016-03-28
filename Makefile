@@ -29,10 +29,38 @@ install:  ## Install project dependencies
 .PHONY: server
 server:  ## Run the ember server locally
 	(command -v watchman >/dev/null 2>&1 && watchman watch-del `pwd` && watchman watch-project `pwd`) || true
-	ember server
+	EMBER_GITHUB_APIKEY="a23e0b40bb0377aa6860" \
+		EMBER_GITHUB_REDIRECT_URI="http://127.0.0.1:4200" \
+		EMBER_ESA_TOKEN_ENDPOINT="http://127.0.0.1:8080/auth/token" \
+		EMBER_ESA_REFRESH_ENDPOINT="http://127.0.0.1:8080/auth/refresh" \
+		ember server \
+		--environment="development" \
+		--live-reload=false
+
+.PHONY: build-staging
+build-staging: clean ## Build the staging version of the ember app
+	EMBER_GITHUB_APIKEY="caf40f799d653c2ca635" \
+		EMBER_GITHUB_REDIRECT_URI="https://my-staging.tidycat.io" \
+		EMBER_ESA_TOKEN_ENDPOINT="https://api-staging.tidycat.io/auth/token" \
+		EMBER_ESA_REFRESH_ENDPOINT="https://api-staging.tidycat.io/auth/refresh" \
+		ember build \
+		--environment production \
+		--output-path dist/
+	@echo "User-agent: *\nDisallow: /" > dist/robots.txt
+
+.PHONY: build-production
+build-production: clean ## Build the production version of the ember app
+	EMBER_GITHUB_APIKEY="89a218832dc2e39f575b" \
+		EMBER_GITHUB_REDIRECT_URI="https://my.tidycat.io" \
+		EMBER_ESA_TOKEN_ENDPOINT="https://api.tidycat.io/auth/token" \
+		EMBER_ESA_REFRESH_ENDPOINT="https://api.tidycat.io/auth/refresh" \
+		ember build \
+		--environment production \
+		--output-path dist/
 
 .PHONY: eslint
-eslint:  ## Run eslint on the app + tests directories
+eslint:  ## Run eslint on the relevant javascript files
+	@`npm bin`/eslint config/
 	@`npm bin`/eslint app/
 	@`npm bin`/eslint tests/
 

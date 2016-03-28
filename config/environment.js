@@ -1,9 +1,10 @@
-/* jshint node: true */
-
 module.exports = function(environment) {
+  // **********
+  //  Defaults
+  // **********
   var ENV = {
     modulePrefix: 'tidycat-ui',
-    environment: environment,
+    environmen: environment,
     baseURL: '/',
     locationType: 'auto',
     EmberENV: {
@@ -16,59 +17,45 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    }
-  };
+    },
 
-  ENV['torii'] = {
-    sessionServiceName: 'session',
-    providers: {
-      'github-oauth2': {
-        apiKey: 'caf40f799d653c2ca635',
-        scope: 'user',
-        redirectUri: 'http://172.17.0.3:4200'
+    torii: {
+      sessionServiceName: 'session',
+      providers: {
+        'github-oauth2': {
+          scope: 'user',
+          apiKey: process.env.EMBER_GITHUB_APIKEY,
+          redirectUri: process.env.EMBER_GITHUB_REDIRECT_URI
+        }
       }
+    },
+
+    'ember-simple-auth': {
+      authorizer: 'authorizer:token'
+    },
+
+    'ember-simple-auth-token': {
+      tokenPropertyName: 'token',
+      authorizationPrefix: 'Bearer ',
+      authorizationHeaderName: 'Authorization',
+      refreshAccessTokens: true,
+      refreshLeeway: 300,
+      timeFactor: 1000,
+      serverTokenEndpoint: process.env.EMBER_ESA_TOKEN_ENDPOINT,
+      serverTokenRefreshEndpoint: process.env.EMBER_ESA_REFRESH_ENDPOINT
     }
+
   };
 
-  ENV['ember-simple-auth'] = {
-    authorizer: 'authorizer:token'
-  };
-
-  ENV['ember-simple-auth-token'] = {
-    serverTokenEndpoint: '/api/auth/token',
-    tokenPropertyName: 'token',
-    authorizationPrefix: 'Bearer ',
-    authorizationHeaderName: 'Authorization',
-    refreshAccessTokens: true,
-    serverTokenRefreshEndpoint: '/api/auth/refresh',
-    tokenExpireName: 'expires_in',
-    refreshLeeway: 300,
-    timeFactor: 1000
-  };
-
-
-  if (environment === 'development') {
-    // ENV.APP.LOG_RESOLVER = true;
-    // ENV.APP.LOG_ACTIVE_GENERATION = true;
-    // ENV.APP.LOG_TRANSITIONS = true;
-    // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-    // ENV.APP.LOG_VIEW_LOOKUPS = true;
-  }
-
+  // *********
+  //  Testing
+  // *********
   if (environment === 'test') {
-    // Testem prefers this...
     ENV.baseURL = '/';
     ENV.locationType = 'none';
-
-    // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
-
     ENV.APP.rootElement = '#ember-testing';
-  }
-
-  if (environment === 'production') {
-
   }
 
   return ENV;
