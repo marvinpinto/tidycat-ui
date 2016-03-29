@@ -66,5 +66,13 @@ module.exports = function(environment) {
     ENV['ember-simple-auth'].store = 'simple-auth-session-store:ephemeral';
   }
 
+  // *************
+  //  Development
+  // *************
+  if (environment === 'development') {
+    ENV.APP.LOG_TRANSITIONS = true;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
+  }
+
   return ENV;
 };
