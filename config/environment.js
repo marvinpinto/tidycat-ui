@@ -31,7 +31,9 @@ module.exports = function(environment) {
     },
 
     'ember-simple-auth': {
-      authorizer: 'authorizer:token'
+      authenticationRoute: 'login',
+      routeAfterAuthentication: 'notifications',
+      routeIfAlreadyAuthenticated: 'notifications'
     },
 
     'ember-simple-auth-token': {
@@ -61,6 +63,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.rootElement = '#ember-testing';
+    ENV['ember-simple-auth'].store = 'simple-auth-session-store:ephemeral';
   }
 
   return ENV;

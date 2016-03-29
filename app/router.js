@@ -7,6 +7,8 @@ const Router = Ember.Router.extend({
 
 /* eslint array-callback-return: 0 */
 Router.map(function() {
+  this.route('notifications');
+  this.route('login', {path: '/'});
 });
 
 export default Router;
