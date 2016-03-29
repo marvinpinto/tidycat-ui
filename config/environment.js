@@ -43,6 +43,11 @@ module.exports = function(environment) {
       timeFactor: 1000,
       serverTokenEndpoint: process.env.EMBER_ESA_TOKEN_ENDPOINT,
       serverTokenRefreshEndpoint: process.env.EMBER_ESA_REFRESH_ENDPOINT
+    },
+
+    'github-api': {
+      host: 'https://api.github.com',
+      namespace: ''
     }
 
   };
