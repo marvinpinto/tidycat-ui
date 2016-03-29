@@ -11,4 +11,8 @@ Router.map(function() {
   this.route('login', {path: '/'});
 });
 
+Router.reopen({
+  location: 'auto'
+});
+
 export default Router;
