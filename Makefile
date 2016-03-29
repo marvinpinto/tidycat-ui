@@ -27,7 +27,7 @@ install:  ## Install project dependencies
 	bower install
 
 .PHONY: server
-server:  ## Run the ember server locally
+server: clean ## Run the ember server locally
 	(command -v watchman >/dev/null 2>&1 && watchman watch-del `pwd` && watchman watch-project `pwd`) || true
 	EMBER_GITHUB_APIKEY="a23e0b40bb0377aa6860" \
 		EMBER_GITHUB_REDIRECT_URI="http://127.0.0.1:4200" \
