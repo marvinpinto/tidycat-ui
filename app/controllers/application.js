@@ -9,14 +9,7 @@ export default Ember.Controller.extend({
     },
 
     login() {
-      var _this = this;
-      this.get('session').authenticate('authenticator:torii', 'github').then(function() {
-        var authorizationCode = _this.get('session.data.authenticated.authorizationCode');
-        var payload = {
-          password: authorizationCode
-        };
-        _this.get('session').authenticate('authenticator:jwt', payload);
-      });
+      this.get('session').authenticate('authenticator:torii', 'github');
     }
 
   }

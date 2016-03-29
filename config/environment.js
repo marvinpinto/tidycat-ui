@@ -31,7 +31,9 @@ module.exports = function(environment) {
     },
 
     'ember-simple-auth': {
-      authorizer: 'authorizer:token'
+      authenticationRoute: 'login',
+      routeAfterAuthentication: 'notifications',
+      routeIfAlreadyAuthenticated: 'notifications'
     },
 
     'ember-simple-auth-token': {
@@ -43,6 +45,11 @@ module.exports = function(environment) {
       timeFactor: 1000,
       serverTokenEndpoint: process.env.EMBER_ESA_TOKEN_ENDPOINT,
       serverTokenRefreshEndpoint: process.env.EMBER_ESA_REFRESH_ENDPOINT
+    },
+
+    'github-api': {
+      host: 'https://api.github.com',
+      namespace: ''
     }
 
   };
@@ -56,6 +63,15 @@ module.exports = function(environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.rootElement = '#ember-testing';
+    ENV['ember-simple-auth'].store = 'simple-auth-session-store:ephemeral';
+  }
+
+  // *************
+  //  Development
+  // *************
+  if (environment === 'development') {
+    ENV.APP.LOG_TRANSITIONS = true;
+    ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
   }
 
   return ENV;
