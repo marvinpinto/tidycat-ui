@@ -1,1 +1,8 @@
+$navbar-height: 55px;
+
 @import "bootstrap";
+@import "font-awesome";
+
+.nav > li {
+  text-align: center;
+}
