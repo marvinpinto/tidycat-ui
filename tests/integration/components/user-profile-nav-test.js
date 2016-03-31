@@ -15,9 +15,9 @@ test('not logged in users see the sign in button', function(assert) {
 test('logged in users see profile buttons', function(assert) {
   assert.expect(1);
   this.set('sessionValue', {isAuthenticated: true});
-  this.set('modelValue', {email: 'bob@example.com'});
+  this.set('modelValue', {login: 'bobjones'});
   this.render(hbs`{{user-profile-nav session=sessionValue model=modelValue}}`);
-  assert.equal(this.$('ul li a p').text().trim(), 'Alertsbob@example.comSign out');
+  assert.equal(this.$('ul li a p').text().trim(), 'AlertsbobjonesSign out');
 });
 
 test('login action is triggered when login button is clicked', function(assert) {
