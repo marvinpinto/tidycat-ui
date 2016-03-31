@@ -1,0 +1,35 @@
+{{#if session.isAuthenticated}}
+
+<ul class="nav navbar-nav navbar-right">
+  <li>
+    <a href="#">{{fa-icon "bell-o" size=2}}<p>Alerts</p></a>
+  </li>
+
+  <li>
+    <a href="#">
+      <img
+        src="https://avatars.githubusercontent.com/u/1159942?v=3"
+        class="img-rounded"
+        height=28
+        width=29
+        alt="Full Name" />
+      <p>{{model.email}}</p>
+    </a>
+  </li>
+
+  <li>
+    <a href="#" {{action 'logout'}}>{{fa-icon "sign-out" size=2}}<p>Sign out</p></a>
+  </li>
+</ul>
+
+{{else}}
+
+<ul class="nav navbar-nav navbar-right">
+  <li>
+    <p class="navbar-btn">
+      <a href="#" {{action 'login'}} class="btn btn-primary">{{fa-icon "github" size="lg"}}  Sign in with GitHub</a>
+    </p>
+  </li>
+</ul>
+
+{{/if}}
