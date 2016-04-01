@@ -4,7 +4,7 @@ module.exports = function(environment) {
   // **********
   var ENV = {
     modulePrefix: 'tidycat-ui',
-    environmen: environment,
+    environment: environment,
     baseURL: '/',
     locationType: 'auto',
     EmberENV: {
