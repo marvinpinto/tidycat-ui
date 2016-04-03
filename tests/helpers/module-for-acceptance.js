@@ -1,6 +1,7 @@
 import {module} from 'qunit';
 import startApp from '../helpers/start-app';
 import destroyApp from '../helpers/destroy-app';
+import Ember from 'ember';
 
 export default function(name, options = {}) {
   module(name, {
@@ -17,6 +18,7 @@ export default function(name, options = {}) {
         options.afterEach.apply(this, arguments);
       }
 
+      Ember.$.mockjax.clear();
       destroyApp(this.application);
     }
   });
