@@ -1,43 +1,27 @@
 /* eslint no-undef: 0 */
-import Ember from 'ember';
-import {module, test} from 'qunit';
-import {authenticateSession, invalidateSession} from '../helpers/ember-simple-auth';
-import startApp from '../helpers/start-app';
-import sinon from 'sinon';
+import {test} from 'qunit';
+import moduleForAcceptance from '../helpers/module-for-acceptance';
+import {currentSession, authenticateSession, invalidateSession} from '../helpers/ember-simple-auth';
 
-var application;
-
-module('Authentication', {
-  setup: function() {
-    application = startApp();
-    application.xhr = sinon.useFakeXMLHttpRequest();
-    application.server = sinon.fakeServer.create();
-    application.server.autoRespond = true;
-    sinon.spy(Ember.$, 'ajax');
-  },
-  teardown: function() {
-    Ember.$.ajax.restore();
-    application.xhr.restore();
-    Ember.run(application, application.destroy);
-  }
-});
+moduleForAcceptance('Acceptance | authentication');
 
 test('users are able to reach the login page when not logged in', function(assert) {
+  invalidateSession(this.application);
   visit('/');
-  andThen(function() {
-    invalidateSession(application);
-  });
+  var session = currentSession(this.application);
   andThen(function() {
     assert.equal(currentRouteName(), 'login');
+    assert.equal(session.get('isAuthenticated'), false);
   });
 });
 
 test('users are able to reach the the notifications page after logging in', function(assert) {
+  invalidateSession(this.application);
   visit('/');
+  authenticateSession(this.application);
+  var session = currentSession(this.application);
   andThen(function() {
-    authenticateSession(application);
-  });
-  andThen(function() {
-    assert.equal(currentRouteName(), 'login');
+    assert.equal(currentRouteName(), 'notifications');
+    assert.equal(session.get('isAuthenticated'), true);
   });
 });
