@@ -5,21 +5,6 @@ moduleForComponent('user-profile-nav', 'Integration | Component | user profile n
   integration: true
 });
 
-test('not logged in users see the sign in button', function(assert) {
-  assert.expect(1);
-  this.set('sessionValue', {isAuthenticated: false});
-  this.render(hbs`{{user-profile-nav session=sessionValue}}`);
-  assert.equal(this.$().text().trim(), 'Sign in with GitHub');
-});
-
-test('logged in users see profile buttons', function(assert) {
-  assert.expect(1);
-  this.set('sessionValue', {isAuthenticated: true});
-  this.set('modelValue', {login: 'bobjones'});
-  this.render(hbs`{{user-profile-nav session=sessionValue model=modelValue}}`);
-  assert.equal(this.$('ul li a p').text().trim(), 'AlertsbobjonesSign out');
-});
-
 test('login action is triggered when login button is clicked', function(assert) {
   assert.expect(1);
   this.set('sessionValue', {isAuthenticated: false});
