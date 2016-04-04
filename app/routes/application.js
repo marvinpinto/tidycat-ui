@@ -25,6 +25,13 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
       _this.refresh();
       _this.transitionTo(authenticatedRoute);
     });
+  },
+
+  actions: {
+    error: function(err) {
+      console.log('Fatal Error: ' + err.message);
+      this.get('session').invalidate();
+    }
   }
 
 });

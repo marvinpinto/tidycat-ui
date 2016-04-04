@@ -4,7 +4,7 @@ module.exports = function(environment) {
   // **********
   var ENV = {
     modulePrefix: 'tidycat-ui',
-    environmen: environment,
+    environment: environment,
     baseURL: '/',
     locationType: 'auto',
     EmberENV: {
@@ -40,6 +40,7 @@ module.exports = function(environment) {
       tokenPropertyName: 'token',
       authorizationPrefix: 'Bearer ',
       authorizationHeaderName: 'Authorization',
+      tokenExpireName: 'exp',
       refreshAccessTokens: true,
       refreshLeeway: 300,
       timeFactor: 1000,
@@ -64,6 +65,10 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.rootElement = '#ember-testing';
     ENV['ember-simple-auth'].store = 'simple-auth-session-store:ephemeral';
+    ENV['ember-simple-auth-token'].serverTokenEndpoint = '/testapi/auth/token';
+    ENV['ember-simple-auth-token'].serverTokenRefreshEndpoint = '/testapi/auth/refresh';
+    ENV['github-api'].host = '/testapi/github';
+    ENV['ember-simple-auth-token'].refreshAccessTokens = false;
   }
 
   // *************

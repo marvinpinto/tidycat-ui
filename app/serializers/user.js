@@ -10,7 +10,6 @@ export default DS.JSONAPISerializer.extend({
         attributes: {
           login: payload.login,
           name: payload.name,
-          email: payload.email,
           avatarUrl: payload.avatar_url
         }
       }

@@ -1,12 +1,16 @@
 import {moduleFor, test} from 'ember-qunit';
+import createFakeToken from '../../helpers/create-fake-token';
 
-moduleFor('adapter:user', 'Unit | Adapter | user', {
-  // Specify the other units that are required for this test.
-  // needs: ['serializer:foo']
-});
+moduleFor('adapter:user', 'Unit | Adapter | user', {});
 
-// Replace this with your real tests.
-test('it exists', function(assert) {
-  let adapter = this.subject();
-  assert.ok(adapter);
+test('valid headers', function(assert) {
+  var fakeToken = createFakeToken('583231', 600, 'octocat', 'secretbearertoken');
+  var session = {
+    data: {
+      authenticated: fakeToken
+    }
+  };
+  var user = this.subject({session: session});
+  assert.equal(user.get('headers.Authorization'), 'Bearer secretbearertoken');
+  assert.equal(user.get('headers.Accept'), 'application/json');
 });
