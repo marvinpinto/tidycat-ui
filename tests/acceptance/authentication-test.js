@@ -42,6 +42,38 @@ test('users are able to log in with a valid jwt', function(assert) {
     }
   });
 
+  $.mockjax({
+    status: 200,
+    type: 'GET',
+    url: '/testapi/notification/threads',
+    dataType: 'json',
+    responseText: {
+      data: [
+        {
+          type: "threads",
+          id: 111111,
+          attributes: {
+            thread_url: "http://example.com/fakethread/1111111",
+            thread_subscription_url: "http://example.com/fakethread/subscribe/1111111",
+            reason: "subscribed",
+            updated_at: 1462543600,
+            subject_title: "Subject Pull Request #1",
+            subject_url: "http://example.com/fakethread/subscribe/1111111",
+            subject_type: "Issue",
+            repository_owner: "octocat",
+            repository_name: "right-pad",
+            tags: [
+              "octocat",
+              "right-pad",
+              "amazing",
+              "work"
+            ]
+          }
+        }
+      ]
+    }
+  });
+
   var app = this.application;
   invalidateSession(app);
   visit('/');
