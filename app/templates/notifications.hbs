@@ -1,5 +1,44 @@
-<ul>
-  <li>Name: {{model.user.name}}</li>
-  <li>Login: {{model.user.login}}</li>
-  <li>Avatar: {{model.user.avatarUrl}}</li>
-</ul>
+<div class="container">
+  <div class="row">
+
+    <!-- Date range picker -->
+    <div class="col-md-3">
+      <div class="form-group has-feedback">
+        <div class="input-group">
+          {{
+          bootstrap-datepicker
+          autoclose=false
+          placeholder="Date Range"
+          class="form-control"
+          clearBtn=true
+          endDate=datePickerEndDate
+          format="MM dd, yyyy"
+          todayHighlight=true
+          }}
+        </div>
+        <i class="fa fa-calendar form-control-feedback input-date-range-picker" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <!-- Filter by tags -->
+    <div class="col-md-8">
+      <div class="form-group has-feedback">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Filter by tags">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filters&nbsp;<span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          </div>
+        </div>
+        <i class="fa fa-tags form-control-feedback input-filter-by-tags" aria-hidden="true"></i>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -6,3 +6,16 @@ $navbar-height: 55px;
 .nav > li {
   text-align: center;
 }
+
+.form-control {
+  font-family: append($font-family-sans-serif, "FontAwesome", "comma")
+}
+
+.input-filter-by-tags {
+  right: 75px;
+  top: 10px;
+}
+
+.input-date-range-picker {
+  top: 10px;
+}
