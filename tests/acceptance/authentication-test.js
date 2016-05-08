@@ -42,6 +42,7 @@ test('users are able to log in with a valid jwt', function(assert) {
     }
   });
 
+  /* eslint-disable camelcase */
   $.mockjax({
     status: 200,
     type: 'GET',
@@ -73,6 +74,7 @@ test('users are able to log in with a valid jwt', function(assert) {
       ]
     }
   });
+  /* eslint-enable camelcase */
 
   var app = this.application;
   invalidateSession(app);

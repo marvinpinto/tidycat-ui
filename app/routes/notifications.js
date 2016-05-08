@@ -4,7 +4,7 @@ import AuthenticatedRouteMixin from
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
-  model: function(params) {
+  model: function() {
     return Ember.RSVP.hash({
       user: this.modelFor('application'),
       thread: this.store.findAll('thread')
