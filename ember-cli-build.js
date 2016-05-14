@@ -5,6 +5,9 @@ module.exports = function(defaults) {
     hinting: false,
     'ember-font-awesome': {
       useScss: true
+    },
+    sassOptions: {
+      precision: 10
     }
   });
   app.import('bower_components/jquery-mockjax/dist/jquery.mockjax.js');
