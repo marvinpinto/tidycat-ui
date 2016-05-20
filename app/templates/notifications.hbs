@@ -14,27 +14,41 @@
         format="MM dd, yyyy"
         todayHighlight=true
         }}
-        <span class="fa fa-calendar form-control-feedback input-date-range-picker" aria-hidden="true"></span>
+        <span class="fa fa-lg fa-calendar form-control-feedback input-date-range-picker" aria-hidden="true"></span>
       </div>
     </div>
 
     <!-- Filter by tags -->
-    <div class="col-md-8">
+    <div class="col-md-6">
       <div class="form-group has-feedback">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Filter by tags">
-          <div class="input-group-btn">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filters&nbsp;<span class="caret"></span></button>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-            </ul>
-          </div>
-        </div>
-        <i class="fa fa-tags form-control-feedback input-filter-by-tags" aria-hidden="true"></i>
+        {{#power-select-multiple
+          options=filterByTagsOptions
+          placeholder="Filter by tags"
+          selected=selectedTags
+          onchange=(action (mut selectedTags))
+          onkeydown=(action "createOnEnter")
+          noMatchesMessage="Hit enter to filter by new tag"
+          as |number|}}
+          {{number}}
+        {{/power-select-multiple}}
+        <span class="fa fa-lg fa-tags form-control-feedback input-tag-filter" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <!-- Saved filters -->
+    <div class="col-md-3">
+      <div class="form-group has-feedback">
+        {{#power-select-with-create
+          options=savedFilterOptions
+          selected=selectedFilter
+          allowClear=true
+          noMatchesMessage="Hit enter to create new filter"
+          onchange=(action (mut selectedFilter))
+          oncreate=(action "createFilter")
+          as |filter|}}
+          {{filter}}
+        {{/power-select-with-create}}
+        <span class="fa fa-lg fa-filter form-control-feedback input-create-filter" aria-hidden="true"></span>
       </div>
     </div>
 
