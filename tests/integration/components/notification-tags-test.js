@@ -6,9 +6,12 @@ moduleForComponent('notification-tags', 'Integration | Component | notification 
 });
 
 test('placeholder text is set correctly', function(assert) {
-  assert.expect(1);
+  assert.expect(2);
   this.set('placeholder', "fake-text");
   this.render(hbs`{{notification-tags placeholder=placeholder}}`);
+  assert.equal(this.$('span.select2-selection__placeholder').text(), 'fake-text');
+  this.set('tagMode', true);
+  this.render(hbs`{{notification-tags placeholder=placeholder tagmode=tagMode}}`);
   assert.equal(this.$('span.select2-selection ul li input').prop('placeholder'), 'fake-text');
 });
 
