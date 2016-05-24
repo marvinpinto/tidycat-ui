@@ -43,8 +43,6 @@
     "ember-export-application-global": "^1.0.4",
     "ember-font-awesome": "2.1.0",
     "ember-load-initializers": "^0.5.0",
-    "ember-power-select": "0.10.8",
-    "ember-power-select-with-create": "0.1.10",
     "ember-resolver": "^2.0.3",
     "ember-simple-auth": "git+https://github.com/rmachielse/ember-simple-auth.git#5b7d80d80f9908c81424dd14b34fc56f5b3b87c8",
     "ember-simple-auth-token": "1.0.0",
