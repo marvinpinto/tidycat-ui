@@ -1,8 +1,12 @@
 $navbar-height: 55px;
+$list-group-active-text-color: #333333;
+$list-group-active-color: #333333;
+$list-group-active-bg: #f5f5f5;
 
 @import "bootstrap";
 @import "font-awesome";
 @import "notification-tags";
+@import "notification-item";
 
 .nav > li {
   text-align: center;
