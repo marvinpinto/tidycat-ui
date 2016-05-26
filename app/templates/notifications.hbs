@@ -20,37 +20,49 @@
 
     <!-- Filter by tags -->
     <div class="col-md-6">
-      <div class="form-group has-feedback">
-        {{#power-select-multiple
-          options=filterByTagsOptions
-          placeholder="Filter by tags"
-          selected=selectedTags
-          onchange=(action (mut selectedTags))
-          onkeydown=(action "createOnEnter")
-          noMatchesMessage="Hit enter to filter by new tag"
-          as |number|}}
-          {{number}}
-        {{/power-select-multiple}}
-        <span class="fa fa-lg fa-tags form-control-feedback input-tag-filter" aria-hidden="true"></span>
-      </div>
+      {{
+      notification-tags
+      fontAwesomeIcon="fa-tags"
+      placeholder="Filter by tags"
+      tagmode=true
+      allowClear=true
+      }}
     </div>
 
     <!-- Saved filters -->
     <div class="col-md-3">
-      <div class="form-group has-feedback">
-        {{#power-select-with-create
-          options=savedFilterOptions
-          selected=selectedFilter
-          allowClear=true
-          noMatchesMessage="Hit enter to create new filter"
-          onchange=(action (mut selectedFilter))
-          oncreate=(action "createFilter")
-          as |filter|}}
-          {{filter}}
-        {{/power-select-with-create}}
-        <span class="fa fa-lg fa-filter form-control-feedback input-create-filter" aria-hidden="true"></span>
-      </div>
+      {{
+      notification-tags
+      fontAwesomeIcon="fa-search"
+      placeholder="Saved search filters"
+      tagmode=false
+      allowClear=true
+      }}
     </div>
 
   </div>
+
+
+  <div class="row">
+    <div class="col-md-12">
+
+      <div class="panel panel-default">
+        <div class="panel-heading"><input title="toggle all" type="checkbox" class="all pull-left">&nbsp;&nbsp;Panel heading without title</div>
+
+        <div class="list-group">
+
+          <ul class="list-group checked-list-box">
+            {{
+            notification-item
+            heading="List group item heading"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu egestas enim. Phasellus viverra tempor leo, ac aliquam orci venenatis ut. Fusce pellentesque diam at pellentesque ultricies. Suspendisse nec urna hendrerit, lacinia neque eu, suscipit turpis. Donec consequat venenatis augue, at euismod libero aliquam at. Morbi sed magna at eros laoreet sagittis ac imperdiet eros. Quisque eu sapien sagittis, tempus elit vitae, sagittis sem.  Suspendisse porta lacus ut malesuada hendrerit. Aliquam aliquam diam id nunc congue imperdiet. Morbi volutpat dui nec dui gravida eleifend. Duis eget ornare odio. Quisque nec sagittis nibh, id molestie elit. Duis ac lacus nulla. Cras eleifend imperdiet sem tempus sollicitudin. Integer congue convallis nibh, id volutpat eros. Proin vel purus et massa pharetra maximus nec id mi."
+            }}
+          </ul>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
