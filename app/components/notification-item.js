@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 
-  isSelected: false,
+  isSelected: Ember.computed.alias('isCheckboxSelected'),
 
   actions: {
     toggleCheckbox() {

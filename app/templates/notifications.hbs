@@ -47,16 +47,30 @@
     <div class="col-md-12">
 
       <div class="panel panel-default">
-        <div class="panel-heading"><input title="toggle all" type="checkbox" class="all pull-left">&nbsp;&nbsp;Panel heading without title</div>
+        <div class="panel-heading" {{action "toggleSelectAllCheckbox" preventDefault=false}}>
+          <div class="row">
+            <div class="col-sm-1">
+              {{input type="checkbox" class="pull-left notification-checkbox" checked=selectAll}}
+            </div>
+            <div class="col-sm-10">
+              <p class="panel-heading-text">GitHub Notifications</p>
+            </div>
+          </div>
+        </div>
 
         <div class="list-group">
 
           <ul class="list-group checked-list-box">
-            {{
-            notification-item
-            heading="List group item heading"
-            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu egestas enim. Phasellus viverra tempor leo, ac aliquam orci venenatis ut. Fusce pellentesque diam at pellentesque ultricies. Suspendisse nec urna hendrerit, lacinia neque eu, suscipit turpis. Donec consequat venenatis augue, at euismod libero aliquam at. Morbi sed magna at eros laoreet sagittis ac imperdiet eros. Quisque eu sapien sagittis, tempus elit vitae, sagittis sem.  Suspendisse porta lacus ut malesuada hendrerit. Aliquam aliquam diam id nunc congue imperdiet. Morbi volutpat dui nec dui gravida eleifend. Duis eget ornare odio. Quisque nec sagittis nibh, id molestie elit. Duis ac lacus nulla. Cras eleifend imperdiet sem tempus sollicitudin. Integer congue convallis nibh, id volutpat eros. Proin vel purus et massa pharetra maximus nec id mi."
-            }}
+            {{#each ghNotifications as |item|}}
+              {{
+              notification-item
+              heading=item.heading
+              content=item.content
+              isCheckboxSelected=item.checked
+              }}
+            {{else}}
+              No notifications just yet.
+            {{/each}}
           </ul>
 
         </div>
