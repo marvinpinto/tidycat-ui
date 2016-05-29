@@ -1,0 +1,16 @@
+@import "bower_components/select2/dist/css/select2";
+@import "bower_components/select2-bootstrap-theme/dist/select2-bootstrap";
+
+.notification-tag-bar {
+    display: none;
+}
+
+.input-select2-tag-bar {
+  top: 10px;
+}
+
+.select2-container--bootstrap
+.select2-selection--multiple
+.select2-selection__clear {
+  margin-right: 35px;
+}

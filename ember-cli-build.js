@@ -11,5 +11,6 @@ module.exports = function(defaults) {
     }
   });
   app.import('bower_components/jquery-mockjax/dist/jquery.mockjax.js');
+  app.import('bower_components/select2/dist/js/select2.full.js');
   return app.toTree();
 };

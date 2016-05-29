@@ -1,0 +1,45 @@
+.per-notification-tag {
+  margin-top: 10px;
+}
+
+.list-group-item-text {
+  margin-top: 10px;
+}
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+
+input.notification-checkbox {
+  visibility: hidden;
+}
+
+input.notification-checkbox:checked:after,
+input.notification-checkbox:after {
+  visibility: visible;
+  font-family: FontAwesome;
+  font-size:25px;height: 17px; width: 17px;
+  position: relative;
+  top: -3px;
+  left: 0.5px;
+  background-color:#FFF;
+  display: inline-block;
+}
+
+input.notification-checkbox:checked:after {
+  content: '\f046';
+}
+
+input.notification-checkbox:after {
+  content: '\f096';
+}
+
+.notification-item {
+  cursor: pointer;
+}
+
+.list-group-item:hover,
+.list-group-item:focus {
+  background-color: $list-group-active-bg;
+}
