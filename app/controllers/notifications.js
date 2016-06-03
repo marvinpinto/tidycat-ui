@@ -1,7 +1,18 @@
 import Ember from 'ember';
+import JWT from 'ember-simple-auth-token/authenticators/jwt';
 
 export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
+  newNotifications: Ember.inject.service('new-notification'),
+
+  initiateNotificationChecking: function() {
+    if (this.get('session.data.authenticated.token')) {
+      var jwt = JWT.create();
+      var jwtData = jwt.getTokenData(this.get('session.data.authenticated.token'));
+      this.get('newNotifications').initialize(jwtData.github_token);
+    }
+  }.on('init'),
+
   datePickerEndDate: new Date(),
   selectAll: false,
 
