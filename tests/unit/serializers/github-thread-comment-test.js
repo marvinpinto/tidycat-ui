@@ -16,6 +16,7 @@ moduleForModel('github-thread-comment', 'Unit | Serializer | github thread comme
 
 test('it serializes GitHub issue comments', function(assert) {
   assert.expect(9);
+  var _this = this;
 
   /* eslint-disable camelcase */
   var response = {
@@ -65,8 +66,8 @@ test('it serializes GitHub issue comments', function(assert) {
     responseText: response
   });
 
-  Ember.run(() => {
-    this.store().find('github-thread-comment', 'fake-issue-comment-1').then(function(comments) {
+  Ember.run(function() {
+    _this.store().find('github-thread-comment', 'fake-issue-comment-1').then(function(comments) {
       assert.equal(comments.get('url'), 'https://api.github.com/repos/spf13/hugo/issues/2184');
       assert.equal(comments.get('htmlUrl'), 'https://github.com/spf13/hugo/issues/2184');
       assert.equal(comments.get('userLogin'), 'vguhesan');
@@ -82,6 +83,7 @@ test('it serializes GitHub issue comments', function(assert) {
 
 test('it serializes comments of type GitHub releases', function(assert) {
   assert.expect(9);
+  var _this = this;
 
   /* eslint-disable camelcase */
   var response = {
@@ -164,8 +166,8 @@ test('it serializes comments of type GitHub releases', function(assert) {
     responseText: response
   });
 
-  Ember.run(() => {
-    this.store().find('github-thread-comment', 'fake-issue-comment-2').then(function(comments) {
+  Ember.run(function() {
+    _this.store().find('github-thread-comment', 'fake-issue-comment-2').then(function(comments) {
       assert.equal(comments.get('url'), 'https://api.github.com/repos/spf13/hugo/releases/3371111');
       assert.equal(comments.get('htmlUrl'), 'https://github.com/spf13/hugo/releases/tag/v0.16');
       assert.equal(comments.get('userLogin'), 'spf13');
