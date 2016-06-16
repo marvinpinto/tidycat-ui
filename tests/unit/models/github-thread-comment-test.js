@@ -1,11 +1,10 @@
 import {moduleForModel, test} from 'ember-qunit';
 
-moduleForModel('thread', 'Unit | Model | thread', {
-  needs: ['model:github-thread']
+moduleForModel('github-thread-comment', 'Unit | Model | github thread comment', {
+  needs: []
 });
 
 test('it exists', function(assert) {
   let model = this.subject();
-  // let store = this.store();
   assert.ok(Boolean(model));
 });

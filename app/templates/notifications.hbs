@@ -61,11 +61,11 @@
         <div class="list-group">
 
           <ul class="list-group checked-list-box">
-            {{#each ghNotifications as |item|}}
+            {{#each model.thread as |item|}}
               {{
               notification-item
-              heading=item.heading
-              content=item.content
+              heading=item.githubThread.subjectTitle
+              content=item.githubThread.githubThreadComment.body
               isCheckboxSelected=item.checked
               }}
             {{else}}

@@ -11,6 +11,11 @@ env:
     - 'AWS_ACCESS_KEY_ID=AKIAJAILV2OUYHPANMRA'
     - secure: "VlWMMWtHeA+fuNXvbBG/hMvaTd/6vB+twW0zjf3s2vF7qtkVCB+TZ/xbO0iDpk6O/eoFaiIddR+5tPCf1glBqdEFAxTibM+MNHB6AlFOgjmRosqdRDjtAe4zAUJdW8JIvEn67N9Rlw3lqthMcr7bvDENUnRjJAqVJf7TroKLy+B7SZig8gln4pk9gaGFof72SYr3FKkve5DxLDjJZP1i2XUON4D3vCG/Wp1j0lZfUAfNLIAqx7peUUnJO0okLfX4wymAVgBtRw/UgpSDzpqpS4BpWx4gk7IVbqDLmb/ma/hMPGMDjPi9fOFnqhUf5puKa2rtaC2r8QN0/UEpSonlOFEhbsg9lNWBFY3tT6XUNICdn8D6RqzkOczywI9BOSYlJew9VB1a92wD5WBHec+pYDpOgPSVnz2UEtyujsmDWzfUwBuUfdDW90VHQ7h961sTxhvcfPyAYhM6DWqeChV7IrYwepkCxu2cTg/UVAHmYpFp6ztgwwVFZxzfQXlVw7Q9AnWaz/K8igEs43+tqiQXHHtPPrABhVKZbzU4plqAyIBQZ3iAMLZ97skfma32FGrfmUlsR9pGORU/gedmBijh6XJDr0Y5L1hY82NT0Xlea/S9JFh3m2TJQ3gixv6eoL+6Vd/C7eu14qiGus67HE4lkpBVjWWhgDNC6Qy3q8Y7uso="
 
+addons:
+  apt:
+    packages:
+      - 'lcov'
+
 cache:
   directories:
     - 'node_modules'

@@ -29,7 +29,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
 
   actions: {
     error: function(err) {
-      console.log('Fatal Error: ' + err.message);
+      console.error('Fatal Error: ' + err.message);
       this.get('session').invalidate();
     }
   }

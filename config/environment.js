@@ -23,7 +23,7 @@ module.exports = function(environment) {
       sessionServiceName: 'session',
       providers: {
         'github-oauth2': {
-          scope: 'user:email,notifications',
+          scope: 'user:email,notifications,repo',
           apiKey: process.env.EMBER_GITHUB_APIKEY,
           redirectUri: process.env.EMBER_GITHUB_REDIRECT_URI
         }
