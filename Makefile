@@ -70,6 +70,7 @@ eslint:  ## Run eslint on the relevant javascript files
 .PHONY: unit-test
 unit-test:  ## Run the ember unit tests
 	@ember test
+	@lcov --list-full-path --list lcov.dat
 
 .PHONY: test
 test: eslint unit-test  ## Run all the style + unit tests
