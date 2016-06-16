@@ -7,6 +7,7 @@ import createFakeToken from '../helpers/create-fake-token';
 moduleForAcceptance('Acceptance | authentication');
 
 test('users are able to reach the login page when not logged in', function(assert) {
+  assert.expect(3);
   invalidateSession(this.application);
   visit('/');
   var session = currentSession(this.application);
@@ -18,6 +19,7 @@ test('users are able to reach the login page when not logged in', function(asser
 });
 
 test('users are able to log in with a valid jwt', function(assert) {
+  assert.expect(5);
   fakeToken = createFakeToken('583231', 600, 'octocat', 'secretbearertoken');
 
   $.mockjax({
@@ -76,6 +78,25 @@ test('users are able to log in with a valid jwt', function(assert) {
   });
   /* eslint-enable camelcase */
 
+  $.mockjax({
+    status: 200,
+    type: 'GET',
+    url: /^\/testapi\/github\/notifications.*/,
+    dataType: 'json',
+    headers: {
+      'X-Poll-Interval': 0
+    },
+    responseText: []
+  });
+
+  $.mockjax({
+    status: 200,
+    type: 'PUT',
+    url: '/testapi/github/notifications',
+    dataType: 'json',
+    responseText: {}
+  });
+
   var app = this.application;
   invalidateSession(app);
   visit('/');
@@ -95,6 +116,7 @@ test('users are able to log in with a valid jwt', function(assert) {
 });
 
 test('users are not able to log in with an expired jwt', function(assert) {
+  assert.expect(3);
   fakeToken = createFakeToken('583231', -600, 'octocat', 'secretbearertoken');
 
   $.mockjax({

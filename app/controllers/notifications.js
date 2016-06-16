@@ -35,7 +35,7 @@ export default Ember.Controller.extend({
   ],
 
   toggleSelectAll: function() {
-    this.get('ghNotifications').setEach('checked', this.get('selectAll'));
+    this.get('model.thread').setEach('checked', this.get('selectAll'));
   }.observes('selectAll'),
 
   actions: {
