@@ -33,7 +33,7 @@ server: clean ## Run the ember server locally
 		EMBER_GITHUB_REDIRECT_URI="http://127.0.0.1:4200" \
 		EMBER_ESA_TOKEN_ENDPOINT="http://127.0.0.1:8080/auth/token" \
 		EMBER_ESA_REFRESH_ENDPOINT="http://127.0.0.1:8080/auth/refresh" \
-		EMBER_NOTIFICATION_ENDPOINT="/api/notification" \
+		EMBER_NOTIFICATION_ENDPOINT="http://127.0.0.1:8081/notification" \
 		ember server \
 		--environment="development" \
 		--live-reload=false
