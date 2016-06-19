@@ -6,5 +6,11 @@ export default DS.Model.extend({
   reason: DS.attr('string'),
   updatedAt: DS.attr('number'),
   checked: DS.attr('boolean', {defaultValue: false}),
-  githubThread: DS.belongsTo('github-thread')
+  githubThread: DS.belongsTo('github-thread'),
+  tags: DS.attr('array'),
+
+  tagsUpdated: function() {
+    this.send('becomeDirty');
+    console.debug("The thread model has been marked as dirty");
+  }.observes('tags.length')
 });

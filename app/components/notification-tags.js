@@ -1,29 +1,88 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-
   fontAwesomeIcon: Ember.computed.alias('fa-icon'),
   placeholderText: Ember.computed.alias('placeholder'),
   tagMode: Ember.computed.alias('tagmode'),
   allowInputClearing: Ember.computed.alias('allowClear'),
+  initialOptions: [],
+
+  // Sorted items from the input data list
+  content: Ember.computed('data', function() {
+    var _data = this.get('data');
+    if (Ember.isArray(_data)) {
+      return _data.sort();
+    }
+    return _data;
+  }),
+
+  // The DOM ID of the select2 element that corresponds to this instance
+  selectComponentId: Ember.computed(function() {
+    return "select-component-" + this.elementId;
+  }),
+
+  selectedObserver: function() {
+    // Sets the "currently selected" items to be the items in the supplied data
+    // list. Basically used as a synchronization mechanism between the inputted
+    // data list and what is displayed. This is needed so that when an item is
+    // removed from the data list (out of band, e.g. during a revert), this
+    // information is also reflected in the selection list. This only really
+    // makes sense for tagged lists.
+    var self = this;
+    Ember.run.next(function() {
+      Ember.$("#" + self.get('selectComponentId')).val(self.get('content')).trigger('change');
+    });
+  }.observes('data.length'),
 
   didInsertElement: function() {
     Ember.run.scheduleOnce('afterRender', this, function() {
-      var _this = this;
+      var self = this;
 
-      this.$(".select2-tag-bar").select2({
+      // Remove the select2 dropdown arrow for this component
+      Ember.run.next(function() {
+        Ember.$("#" + self.get('selectComponentId')).next('span').find('.select2-selection__arrow').remove();
+      });
+
+      // Initialize the 'initialOptions' list with the supplied initial
+      // contents.
+      self.set('initialOptions', Ember.copy(self.get('content')));
+
+      // Callback for after an item is selected or added
+      Ember.$("#" + self.get('selectComponentId')).on('select2:select', function(e) {
+        var item = e.params.data.id;
+        // In tag mode, add the selected item back to the input (bound) data
+        // list
+        if (self.get('tagMode')) {
+          console.debug("New item added: " + item);
+          self.get('data').pushObject(item);
+        }
+      });
+
+      // Callback for after an item is unselected or removed
+      Ember.$("#" + self.get('selectComponentId')).on('select2:unselect', function(e) {
+        var item = e.params.data.id;
+        // In tag mode, remove the selected item from the input (bound) data
+        // list
+        if (self.get('tagMode')) {
+          console.debug("item removed: " + item);
+          self.get('data').removeObject(item);
+        }
+      });
+
+      // Initial setup of the select2 jquery component
+      Ember.$("#" + self.get('selectComponentId')).select2({
         theme: 'bootstrap',
-        placeholder: this.get('placeholderText'),
+        placeholder: self.get('placeholderText'),
         tags: true,
-        multiple: this.get('tagMode'),
-        allowClear: this.get('allowInputClearing'),
+        multiple: self.get('tagMode'),
+        allowClear: self.get('allowInputClearing'),
 
         formatNoMatches: function() {
           return '';
         },
 
         dropdownCssClass: function() {
-          if (_this.get('tagMode')) {
+          if (self.get('tagMode')) {
             return 'notification-tag-bar';
           }
           return '';
@@ -44,8 +103,6 @@ export default Ember.Component.extend({
         }
 
       });
-
-      this.$('b[role="presentation"]').hide();  // hide the select2 dropdown arrow
     });
   }
 
