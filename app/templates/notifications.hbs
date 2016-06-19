@@ -64,10 +64,12 @@
             {{#each model.thread as |item|}}
               {{
               notification-item
+              threadmodel=item
               heading=item.githubThread.subjectTitle
               content=item.githubThread.githubThreadComment.body
               isCheckboxSelected=item.checked
               listData=item.tags
+              triggerUndoNotification="triggerUndoNotification"
               }}
             {{else}}
               No notifications just yet.

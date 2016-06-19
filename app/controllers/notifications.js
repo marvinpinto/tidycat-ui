@@ -41,7 +41,11 @@ export default Ember.Controller.extend({
   actions: {
     toggleSelectAllCheckbox() {
       this.toggleProperty('selectAll');
+    },
+
+    triggerUndoNotification: function(dirtyModel) {
+      var modelName = dirtyModel.constructor.modelName;
+      console.debug(`Triggering a notification update for model "${modelName}" (ID ${dirtyModel.id})`);
     }
   }
-
 });

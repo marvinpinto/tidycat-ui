@@ -55,6 +55,7 @@ export default Ember.Component.extend({
         if (self.get('tagMode')) {
           console.debug("New item added: " + item);
           self.get('data').pushObject(item);
+          self.sendAction('itemAdded', item);
         }
       });
 
@@ -66,6 +67,7 @@ export default Ember.Component.extend({
         if (self.get('tagMode')) {
           console.debug("item removed: " + item);
           self.get('data').removeObject(item);
+          self.sendAction('itemRemoved', item);
         }
       });
 
@@ -105,5 +107,4 @@ export default Ember.Component.extend({
       });
     });
   }
-
 });
