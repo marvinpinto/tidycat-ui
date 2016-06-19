@@ -106,3 +106,13 @@ test("A removed tag item triggers the 'triggerUndoNotification' action", functio
     self.$('.select2-tag-bar').trigger(e);
   });
 });
+
+test('The checkbox on a row is selected when the relevant area is clicked', function(assert) {
+  assert.expect(2);
+  this.render(hbs`{{notification-item heading="item heading" content="item content"}}`);
+  assert.equal(this.$(':input.notification-checkbox').prop('checked'), false, "checkbox is initially unchecked");
+  this.$('.list-group-item-heading').click();
+  return wait().then(function() {
+    assert.equal(this.$(':input.notification-checkbox').prop('checked'), true, "clicking on the item heading marks it as checked");
+  });
+});
