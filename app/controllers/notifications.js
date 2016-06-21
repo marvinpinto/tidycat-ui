@@ -38,6 +38,31 @@ export default Ember.Controller.extend({
     this.get('model.thread').setEach('checked', this.get('selectAll'));
   }.observes('selectAll'),
 
+  bootstrapAlert: function(type, message, timeout) {
+    return new Ember.RSVP.Promise(function(resolve) {
+      // Close any outstanding alerts before displaying the new alert
+      var outstandingAlert = Ember.$('#floating-alert');
+      if (outstandingAlert) {
+        console.debug("Closing previously displayed alerts");
+        outstandingAlert.alert('close');
+      }
+
+      var fontAwesome = `<i class="fa fa-sm fa-times-circle"></i>`;
+      var premable = `<div id="floating-alert" class="alert alert-${type} fade in"><button type="button" class="close" data-dismiss="alert" aria-label="Close">${fontAwesome}</button>${message} &nbsp;</div>`;
+      Ember.$(premable).appendTo('#alert-placeholder');
+
+      // Remove the alert after the given timeout
+      Ember.run.later((function() {
+        Ember.$("#floating-alert").alert('close');
+      }), timeout);
+
+      // resolve this promise after the alert is closed
+      Ember.$('#floating-alert').on('closed.bs.alert', function() {
+        resolve();
+      });
+    });
+  },
+
   actions: {
     toggleSelectAllCheckbox() {
       this.toggleProperty('selectAll');
