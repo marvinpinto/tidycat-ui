@@ -54,7 +54,10 @@ export default Ember.Component.extend({
         // list
         if (self.get('tagMode')) {
           console.debug("New item added: " + item);
-          self.get('data').pushObject(item);
+          var origArray = self.get('data');
+          var newArray = Ember.copy(origArray, true);
+          self.set('data', newArray);
+          newArray.pushObject(item);
           self.sendAction('itemAdded', item);
         }
       });
@@ -66,7 +69,10 @@ export default Ember.Component.extend({
         // list
         if (self.get('tagMode')) {
           console.debug("item removed: " + item);
-          self.get('data').removeObject(item);
+          var origArray = self.get('data');
+          var newArray = Ember.copy(origArray, true);
+          self.set('data', newArray);
+          newArray.removeObject(item);
           self.sendAction('itemRemoved', item);
         }
       });
