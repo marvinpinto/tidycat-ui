@@ -69,8 +69,36 @@ export default Ember.Controller.extend({
     },
 
     triggerUndoNotification: function(dirtyModel) {
+      var self = this;
       var modelName = dirtyModel.constructor.modelName;
-      console.debug(`Triggering a notification update for model "${modelName}" (ID ${dirtyModel.id})`);
+      var modelId = dirtyModel.id;
+      console.debug(`Triggering a notification update for model "${modelName}" (ID ${modelId})`);
+      var undoLink = `<span id="undo-link" data-dirty-model="${modelName}" data-dirty-model-id="${modelId}">undo</span>`;
+      this.bootstrapAlert("info", `Changes saved. ${undoLink}`, 3000).then(function() {
+        dirtyModel.save().then(function() {
+          console.debug(`Successfully persisted the "${modelName}" model`);
+        }).catch(function(err) {
+          var humanMsg = "Ran into an error while trying to write your saved information back upstream. If this persists, try logging out and back in again.";
+          console.error(`Ran into an error while persisting the "${modelName}" model`);
+          console.error(`Error: ${err}`);
+          self.bootstrapAlert("error", humanMsg, 10000);
+        });
+      });
     }
-  }
+  },
+
+  revertDirtyModel: function() {
+    var self = this;
+
+    Ember.run.next(function() {
+      // Callback for when the "undo" link is clicked
+      Ember.$('#alert-placeholder').on('click', '#undo-link', function() {
+        var dirtyModel = Ember.$("#undo-link").data('dirty-model');
+        var dirtyModelId = Ember.$("#undo-link").data('dirty-model-id');
+        var modelObj = self.get(`model.${dirtyModel}`).findBy('id', dirtyModelId.toString());
+        modelObj.rollbackAttributes();
+        console.debug(`Successfully rolled back the "${dirtyModel}" model`);
+      });
+    });
+  }.on('init')
 });
