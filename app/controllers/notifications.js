@@ -58,7 +58,7 @@ export default Ember.Controller.extend({
 
       // resolve this promise after the alert is closed
       Ember.$('#floating-alert').on('closed.bs.alert', function() {
-        resolve();
+        Ember.run(null, resolve);
       });
     });
   },
