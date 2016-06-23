@@ -58,16 +58,18 @@
           </div>
         </div>
 
-        <div class="list-group">
+        <div class="list-group notification-items">
 
           <ul class="list-group checked-list-box">
             {{#each model.thread as |item|}}
               {{
               notification-item
+              threadmodel=item
               heading=item.githubThread.subjectTitle
               content=item.githubThread.githubThreadComment.body
               isCheckboxSelected=item.checked
               listData=item.tags
+              triggerUndoNotification="triggerUndoNotification"
               }}
             {{else}}
               No notifications just yet.
@@ -78,6 +80,10 @@
       </div>
 
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12" id="alert-placeholder"></div>
   </div>
 
 </div>

@@ -26,7 +26,7 @@ export default DS.JSONAPIAdapter.extend({
         headers: _this.get('headers'),
         dataType: 'json',
         success: function(data) {
-          resolve(data);
+          Ember.run(null, resolve, data);
         },
         error: function() {
           // There's a weird case where a user may or may not be "subscribed"
@@ -40,7 +40,7 @@ export default DS.JSONAPIAdapter.extend({
             reason: null,
             url: id
           };
-          resolve(data);
+          Ember.run(null, resolve, data);
         }
       });
     });
@@ -64,14 +64,14 @@ export default DS.JSONAPIAdapter.extend({
         contentType: 'application/json',
         data: {subscribed: data.subscribed, ignored: data.ignored},
         success: function(data) {
-          resolve(data);
+          Ember.run(null, resolve, data);
         },
         error: function(jqXHR, textStatus, errorThrown) {
           var msg = `Error occurred while attempting to update ${id}`;
           console.error(msg);
           console.error(`Status: ${textStatus}`);
           console.error(`Message: ${errorThrown}`);
-          reject(msg);
+          Ember.run(null, reject, msg);
         }
       });
     });

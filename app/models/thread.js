@@ -7,10 +7,5 @@ export default DS.Model.extend({
   updatedAt: DS.attr('number'),
   checked: DS.attr('boolean', {defaultValue: false}),
   githubThread: DS.belongsTo('github-thread'),
-  tags: DS.attr('array'),
-
-  tagsUpdated: function() {
-    this.send('becomeDirty');
-    console.debug("The thread model has been marked as dirty");
-  }.observes('tags.length')
+  tags: DS.attr('array')
 });

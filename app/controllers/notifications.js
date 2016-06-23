@@ -38,10 +38,67 @@ export default Ember.Controller.extend({
     this.get('model.thread').setEach('checked', this.get('selectAll'));
   }.observes('selectAll'),
 
+  bootstrapAlert: function(type, message, timeout) {
+    return new Ember.RSVP.Promise(function(resolve) {
+      // Close any outstanding alerts before displaying the new alert
+      var outstandingAlert = Ember.$('#floating-alert');
+      if (outstandingAlert) {
+        console.debug("Closing previously displayed alerts");
+        outstandingAlert.alert('close');
+      }
+
+      var fontAwesome = `<i class="fa fa-sm fa-times-circle"></i>`;
+      var premable = `<div id="floating-alert" class="alert alert-${type} fade in"><button type="button" class="close" data-dismiss="alert" aria-label="Close">${fontAwesome}</button>${message} &nbsp;</div>`;
+      Ember.$(premable).appendTo('#alert-placeholder');
+
+      // Remove the alert after the given timeout
+      Ember.run.later((function() {
+        Ember.$("#floating-alert").alert('close');
+      }), timeout);
+
+      // resolve this promise after the alert is closed
+      Ember.$('#floating-alert').on('closed.bs.alert', function() {
+        Ember.run(null, resolve);
+      });
+    });
+  },
+
   actions: {
     toggleSelectAllCheckbox() {
       this.toggleProperty('selectAll');
-    }
-  }
+    },
 
+    triggerUndoNotification: function(dirtyModel) {
+      var self = this;
+      var modelName = dirtyModel.constructor.modelName;
+      var modelId = dirtyModel.id;
+      console.debug(`Triggering a notification update for model "${modelName}" (ID ${modelId})`);
+      var undoLink = `<span id="undo-link" data-dirty-model="${modelName}" data-dirty-model-id="${modelId}">undo</span>`;
+      this.bootstrapAlert("info", `Changes saved. ${undoLink}`, 3000).then(function() {
+        dirtyModel.save().then(function() {
+          console.debug(`Successfully persisted the "${modelName}" model`);
+        }).catch(function(err) {
+          var humanMsg = "Ran into an error while trying to write your saved information back upstream. If this persists, try logging out and back in again.";
+          console.error(`Ran into an error while persisting the "${modelName}" model`);
+          console.error(`Error: ${err}`);
+          self.bootstrapAlert("error", humanMsg, 10000);
+        });
+      });
+    }
+  },
+
+  revertDirtyModel: function() {
+    var self = this;
+
+    Ember.run.next(function() {
+      // Callback for when the "undo" link is clicked
+      Ember.$('#alert-placeholder').on('click', '#undo-link', function() {
+        var dirtyModel = Ember.$("#undo-link").data('dirty-model');
+        var dirtyModelId = Ember.$("#undo-link").data('dirty-model-id');
+        var modelObj = self.get(`model.${dirtyModel}`).findBy('id', dirtyModelId.toString());
+        modelObj.rollbackAttributes();
+        console.debug(`Successfully rolled back the "${dirtyModel}" model`);
+      });
+    });
+  }.on('init')
 });

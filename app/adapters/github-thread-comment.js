@@ -26,14 +26,14 @@ export default DS.JSONAPIAdapter.extend({
         method: 'GET',
         headers: _this.get('headers'),
         success: function(data) {
-          resolve(data);
+          Ember.run(null, resolve, data);
         },
         error: function(jqXHR, textStatus, errorThrown) {
           var msg = `Error occurred while retrieving comment URL ${id}`;
           console.error(msg);
           console.error(`Status: ${textStatus}`);
           console.error(`Message: ${errorThrown}`);
-          reject(msg);
+          Ember.run(null, reject, msg);
         }
       });
     });
