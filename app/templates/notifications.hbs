@@ -19,13 +19,14 @@
     </div>
 
     <!-- Filter by tags -->
-    <div class="col-md-6">
+    <div class="col-md-6 tag-filter-bar">
       {{
       notification-tags
       fontAwesomeIcon="fa-tags"
       placeholder="Filter by tags"
       tagmode=true
       allowClear=true
+      data=filterTags
       }}
     </div>
 
@@ -61,7 +62,7 @@
         <div class="list-group notification-items">
 
           <ul class="list-group checked-list-box">
-            {{#each model.thread as |item|}}
+            {{#each filteredThreadModel as |item|}}
               {{
               notification-item
               threadmodel=item

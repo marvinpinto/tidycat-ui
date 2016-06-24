@@ -4,6 +4,7 @@ import JWT from 'ember-simple-auth-token/authenticators/jwt';
 export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
   newNotifications: Ember.inject.service('new-notification'),
+  filterTags: [],
 
   initiateNotificationChecking: function() {
     if (this.get('session.data.authenticated.token')) {
@@ -100,5 +101,57 @@ export default Ember.Controller.extend({
         console.debug(`Successfully rolled back the "${dirtyModel}" model`);
       });
     });
-  }.on('init')
+  }.on('init'),
+
+  filteredThreadModel: Ember.computed('filterTags', function() {
+    var filters = this.get('filterTags');
+
+    return this.get('model.thread').filter(function(item) {
+      // For each model, iterate over each of the specified filters in the
+      // filter bar
+
+      var includeModelInResults = true;
+      var tags = item.get('tags');
+
+      // Assume that by default, models *will* be included in the filtered
+      // results. This allows us to short-circuit the logic using the 'every'
+      // iterator below.
+
+      filters.every(function(filter) {
+        var inverseMatch = filter.match(/^!(.+)/);
+        var regexMatch = new RegExp(filter, 'i');
+
+        if (inverseMatch) {
+          var invRegex = new RegExp(inverseMatch[1], 'i');
+          tags.every(function(tag) {
+            var match = invRegex.test(tag);
+            // A 'match' here means that there's a tag we explicitly do not
+            // want in our filtered results, hence this model cannot be
+            // included in the filtered results.
+            // includeModelInResults = false;
+            if (match) {
+              includeModelInResults = false;
+              return false;
+            }
+            return true;
+          });
+        } else {
+          var positiveMatchFound = false;
+          tags.every(function(tag) {
+            var match = regexMatch.test(tag);
+            if (match) {
+              positiveMatchFound = true;
+              return false;  // short-circuit this loop since there is no point continuing
+            }
+            return true;
+          });
+          includeModelInResults = positiveMatchFound;
+        }
+
+        return includeModelInResults;
+      });  // end filters.every
+
+      return includeModelInResults;
+    });  // end model.thread
+  })
 });
