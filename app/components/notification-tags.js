@@ -30,7 +30,7 @@ export default Ember.Component.extend({
     // makes sense for tagged lists.
     var self = this;
     Ember.run.next(function() {
-      Ember.$("#" + self.get('selectComponentId')).val(self.get('content')).trigger('change');
+      self.$("#" + self.get('selectComponentId')).val(self.get('content')).trigger('change');
     });
   }.observes('data.length'),
 
@@ -40,7 +40,7 @@ export default Ember.Component.extend({
 
       // Remove the select2 dropdown arrow for this component
       Ember.run.next(function() {
-        Ember.$("#" + self.get('selectComponentId')).next('span').find('.select2-selection__arrow').remove();
+        self.$("#" + self.get('selectComponentId')).next('span').find('.select2-selection__arrow').remove();
       });
 
       // Initialize the 'initialOptions' list with the supplied initial
@@ -48,7 +48,7 @@ export default Ember.Component.extend({
       self.set('initialOptions', Ember.copy(self.get('content')));
 
       // Callback for after an item is selected or added
-      Ember.$("#" + self.get('selectComponentId')).on('select2:select', function(e) {
+      self.$("#" + self.get('selectComponentId')).on('select2:select', function(e) {
         var item = e.params.data.id;
         // In tag mode, add the selected item back to the input (bound) data
         // list
@@ -56,14 +56,14 @@ export default Ember.Component.extend({
           console.debug("New item added: " + item);
           var origArray = self.get('data');
           var newArray = Ember.copy(origArray, true);
-          self.set('data', newArray);
           newArray.pushObject(item);
+          self.set('data', newArray);
           self.sendAction('itemAdded', item);
         }
       });
 
       // Callback for after an item is unselected or removed
-      Ember.$("#" + self.get('selectComponentId')).on('select2:unselect', function(e) {
+      self.$("#" + self.get('selectComponentId')).on('select2:unselect', function(e) {
         var item = e.params.data.id;
         // In tag mode, remove the selected item from the input (bound) data
         // list
@@ -71,14 +71,14 @@ export default Ember.Component.extend({
           console.debug("item removed: " + item);
           var origArray = self.get('data');
           var newArray = Ember.copy(origArray, true);
-          self.set('data', newArray);
           newArray.removeObject(item);
+          self.set('data', newArray);
           self.sendAction('itemRemoved', item);
         }
       });
 
       // Initial setup of the select2 jquery component
-      Ember.$("#" + self.get('selectComponentId')).select2({
+      self.$("#" + self.get('selectComponentId')).select2({
         theme: 'bootstrap',
         placeholder: self.get('placeholderText'),
         tags: true,
