@@ -3,6 +3,7 @@ import JWT from 'ember-simple-auth-token/authenticators/jwt';
 
 export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
+  store: Ember.inject.service('store'),
   newNotifications: Ember.inject.service('new-notification'),
   filterTags: [],
 
@@ -85,6 +86,14 @@ export default Ember.Controller.extend({
           self.bootstrapAlert("error", humanMsg, 10000);
         });
       });
+    },
+
+    fromDateUpdated: function(newFromDate) {
+      var self = this;
+      var fromDate = Math.floor(new Date(newFromDate).getTime() / 1000);
+      this.get('store').query('thread', {from: fromDate}).then(function(threads) {
+        self.set('model.thread', threads);
+      });
     }
   },
 
@@ -103,7 +112,15 @@ export default Ember.Controller.extend({
     });
   }.on('init'),
 
-  filteredThreadModel: Ember.computed('filterTags', function() {
+  prefillDatePickerDate: function() {
+    var oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    Ember.run.next(function() {
+      Ember.$('.from-date-picker').datepicker('setDate', oneWeekAgo);
+    });
+  }.on('init'),
+
+  filteredThreadModel: Ember.computed('filterTags', 'model.thread', function() {
     var filters = this.get('filterTags');
 
     return this.get('model.thread').filter(function(item) {

@@ -6,13 +6,15 @@
       <div class="form-group has-feedback">
         {{
         bootstrap-datepicker
-        autoclose=false
+        autoclose=true
         placeholder="From"
-        class="form-control"
+        class="form-control from-date-picker"
         clearBtn=true
         endDate=datePickerEndDate
         format="MM dd, yyyy"
         todayHighlight=true
+        changeDate="fromDateUpdated"
+        todayBtn="linked"
         }}
         <span class="fa fa-lg fa-calendar form-control-feedback input-date-range-picker" aria-hidden="true"></span>
       </div>
