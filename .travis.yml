@@ -45,7 +45,7 @@ before_deploy:
 
 deploy:
   - provider: 'script'
-    script: 'make build-staging && S3_WEBSITE_BUCKET="my-staging.tidycat.io" CLOUDFRONT_DISTRIBUTION_ID="E2GRWC8SMPCPLU" s3_website push'
+    script: 'make build-staging && S3_WEBSITE_BUCKET="static-website-my-staging.tidycat.io" CLOUDFRONT_DISTRIBUTION_ID="E2PYE79KNN9208" s3_website push'
     skip_cleanup: true
     on:
       repo: 'tidycat/user-interface'
