@@ -1,12 +1,17 @@
 import {moduleFor, test} from 'ember-qunit';
 
-moduleFor('adapter:thread', 'Unit | Adapter | thread', {
-  // Specify the other units that are required for this test.
-  // needs: ['serializer:foo']
-});
+moduleFor('adapter:thread', 'Unit | Adapter | thread', {});
 
-// Replace this with your real tests.
-test('it exists', function(assert) {
-  let adapter = this.subject();
-  assert.ok(adapter);
+test('valid headers', function(assert) {
+  var session = {
+    data: {
+      authenticated: {
+        token: "fake_token"
+      }
+    }
+  };
+  var thread = this.subject({session: session});
+  assert.equal(thread.get('headers.Authorization'), 'Bearer fake_token');
+  assert.equal(thread.get('headers.Accept'), 'application/json');
+  assert.equal(thread.get('headers.Content-Type'), 'application/json');
 });
