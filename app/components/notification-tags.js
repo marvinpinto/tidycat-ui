@@ -7,15 +7,6 @@ export default Ember.Component.extend({
   allowInputClearing: Ember.computed.alias('allowClear'),
   initialOptions: [],
 
-  // Sorted items from the input data list
-  content: Ember.computed('data', function() {
-    var _data = this.get('data');
-    if (Ember.isArray(_data)) {
-      return _data.sort();
-    }
-    return _data;
-  }),
-
   // The DOM ID of the select2 element that corresponds to this instance
   selectComponentId: Ember.computed(function() {
     return "select-component-" + this.elementId;
@@ -28,10 +19,23 @@ export default Ember.Component.extend({
     // removed from the data list (out of band, e.g. during a revert), this
     // information is also reflected in the selection list. This only really
     // makes sense for tagged lists.
-    var self = this;
-    Ember.run.next(function() {
-      self.$("#" + self.get('selectComponentId')).val(self.get('content')).trigger('change');
-    });
+    let self = this;
+    let selectList = self.$("#" + self.get('selectComponentId'));
+    if (self.get('tagMode')) {
+      Ember.run.next(function() {
+        // Clear out the stale option values and re-add the new, relevant
+        // values
+        selectList.empty();
+        Ember.$.each(self.get('data'), function(index, item) {
+          selectList.append(new Option(item, item));  // eslint-disable-line no-undef
+        });
+
+        // After the available options have been updated, ensure that the
+        // 'selected' options are the ones we need
+        selectList.val(self.get('data')).trigger('change');
+      });
+    }
+    selectList.select2("close");
   }.observes('data.length'),
 
   didInsertElement: function() {
@@ -45,7 +49,7 @@ export default Ember.Component.extend({
 
       // Initialize the 'initialOptions' list with the supplied initial
       // contents.
-      self.set('initialOptions', Ember.copy(self.get('content')));
+      self.set('initialOptions', Ember.computed.oneWay('data'));
 
       // Callback for after an item is selected or added
       self.$("#" + self.get('selectComponentId')).on('select2:select', function(e) {
@@ -58,8 +62,8 @@ export default Ember.Component.extend({
           var newArray = Ember.copy(origArray, true);
           newArray.pushObject(item);
           self.set('data', newArray);
-          self.sendAction('itemAdded', item);
         }
+        self.sendAction('itemAdded', item);
       });
 
       // Callback for after an item is unselected or removed
@@ -73,8 +77,8 @@ export default Ember.Component.extend({
           var newArray = Ember.copy(origArray, true);
           newArray.removeObject(item);
           self.set('data', newArray);
-          self.sendAction('itemRemoved', item);
         }
+        self.sendAction('itemRemoved', item);
       });
 
       // Initial setup of the select2 jquery component
@@ -118,7 +122,6 @@ export default Ember.Component.extend({
           self.$("#" + self.get('selectComponentId')).val(null).trigger('change');
         }
       });
-
     });
   }
 });
