@@ -41,14 +41,14 @@ test('The select2 dropdown arrow is removed from the UI', function(assert) {
   });
 });
 
-test('In non-tag mode, items are loaded as options and the last item shows up as the selected item', function(assert) {
+test('In non-tag mode, items are loaded as options and no item is initially selected', function(assert) {
   var self = this;
   assert.expect(5);
   var inputData = ["opt1", "opt2", "opt3"];
   this.set('data', inputData);
   this.render(hbs`{{notification-tags tagmode=false data=data}}`);
   return wait().then(function() {
-    assert.equal(self.$('.select2-tag-bar').select2('val'), "opt3", "the last supplied option is the selected value");
+    assert.equal(self.$('.select2-tag-bar').select2('val'), null, "nothing is initally selected");
     assert.equal(self.$('.select2-tag-bar option').size(), 3, "there are three options available");
     assert.equal(self.$('.select2-tag-bar option:eq(0)').text(), "opt1", "first available option is opt1");
     assert.equal(self.$('.select2-tag-bar option:eq(1)').text(), "opt2", "second available option is opt2");
@@ -64,14 +64,18 @@ test('In non-tag mode, all items are cleared when the X is clicked', function(as
   this.set('placeholder', "placeholder text");
   this.render(hbs`{{notification-tags tagmode=false data=data allowClear=true placeholder=placeholder}}`);
   return wait().then(function() {
-    assert.equal(self.$('.select2-tag-bar').select2('val'), "opt3", "currently selected option is opt3");
-    self.$('.select2-tag-bar').val('').trigger('change');
+    assert.equal(self.$('.select2-tag-bar').select2('val'), null, "nothing is initally selected");
+    // Select opt3
+    self.$('.select2-tag-bar').val(['opt3']).trigger('change');
     return wait().then(function() {
-      assert.equal(self.$('.select2-tag-bar').select2('val'), null, "nothing is currently selected");
-      assert.equal(self.$('.select2-tag-bar option').size(), 3, "there are three options available");
-      assert.equal(self.$('.select2-tag-bar option:eq(0)').text(), "opt1", "first available option is opt1");
-      assert.equal(self.$('.select2-tag-bar option:eq(1)').text(), "opt2", "second available option is opt2");
-      assert.equal(self.$('.select2-tag-bar option:eq(2)').text(), "opt3", "third available option is opt3");
+      self.$('.select2-tag-bar').val('').trigger('change');
+      return wait().then(function() {
+        assert.equal(self.$('.select2-tag-bar').select2('val'), null, "nothing is currently selected");
+        assert.equal(self.$('.select2-tag-bar option').size(), 3, "there are three options available");
+        assert.equal(self.$('.select2-tag-bar option:eq(0)').text(), "opt1", "first available option is opt1");
+        assert.equal(self.$('.select2-tag-bar option:eq(1)').text(), "opt2", "second available option is opt2");
+        assert.equal(self.$('.select2-tag-bar option:eq(2)').text(), "opt3", "third available option is opt3");
+      });
     });
   });
 });

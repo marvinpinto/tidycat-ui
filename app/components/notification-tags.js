@@ -111,6 +111,14 @@ export default Ember.Component.extend({
         }
 
       });
+
+      // Clear out the initally selected (default) saved-search-filter item
+      Ember.run.next(function() {
+        if (!self.get('tagMode')) {
+          self.$("#" + self.get('selectComponentId')).val(null).trigger('change');
+        }
+      });
+
     });
   }
 });
