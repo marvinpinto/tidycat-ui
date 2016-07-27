@@ -123,52 +123,28 @@ export default Ember.Controller.extend({
   filteredThreadModel: Ember.computed('filterTags', 'model.thread', function() {
     var filters = this.get('filterTags');
 
+    // Filter threads, returning only those that satisfy all search expressions.
     return this.get('model.thread').filter(function(item) {
-      // For each model, iterate over each of the specified filters in the
-      // filter bar
-
-      var includeModelInResults = true;
       var tags = item.get('tags');
 
-      // Assume that by default, models *will* be included in the filtered
-      // results. This allows us to short-circuit the logic using the 'every'
-      // iterator below.
-
-      filters.every(function(filter) {
+      // Thread must match every positive filter and not match any negative filter.
+      return filters.every(function(filter) {
         var inverseMatch = filter.match(/^!(.+)/);
         var regexMatch = new RegExp(filter, 'i');
 
         if (inverseMatch) {
+          // Thread passes a negative filter if none of its tags match the regex.
           var invRegex = new RegExp(inverseMatch[1], 'i');
-          tags.every(function(tag) {
-            var match = invRegex.test(tag);
-            // A 'match' here means that there's a tag we explicitly do not
-            // want in our filtered results, hence this model cannot be
-            // included in the filtered results.
-            // includeModelInResults = false;
-            if (match) {
-              includeModelInResults = false;
-              return false;
-            }
-            return true;
+          return !tags.any(function(tag) {
+            return invRegex.test(tag);
           });
-        } else {
-          var positiveMatchFound = false;
-          tags.every(function(tag) {
-            var match = regexMatch.test(tag);
-            if (match) {
-              positiveMatchFound = true;
-              return false;  // short-circuit this loop since there is no point continuing
-            }
-            return true;
-          });
-          includeModelInResults = positiveMatchFound;
         }
 
-        return includeModelInResults;
+        // Thread passes a positive filter if any of its tags match the regex.
+        return tags.any(function(tag) {
+          return regexMatch.test(tag);
+        });
       });  // end filters.every
-
-      return includeModelInResults;
     });  // end model.thread
   })
 });
