@@ -97,6 +97,25 @@ test('users are able to log in with a valid jwt', function(assert) {
     responseText: {}
   });
 
+  $.mockjax({
+    status: 200,
+    type: 'GET',
+    url: '/testapi/environment/settings/583231',
+    dataType: 'json',
+    responseText: {
+      data: {
+        type: "settings",
+        id: 583231,
+        relationships: {
+          'saved-filters': {
+            data: []
+          }
+        }
+      },
+      included: []
+    }
+  });
+
   var app = this.application;
   invalidateSession(app);
   visit('/');

@@ -88,6 +88,7 @@ export default Ember.Component.extend({
         tags: true,
         multiple: self.get('tagMode'),
         allowClear: self.get('allowInputClearing'),
+        dropdownParent: $(self.get('select2DropdownParent')),  // eslint-disable-line no-undef
 
         formatNoMatches: function() {
           return '';
