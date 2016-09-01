@@ -148,7 +148,10 @@ export default Ember.Controller.extend({
       let tFilterRecord = this.get('store').peekRecord('savedFilter', item);
       let self = this;
       tFilterRecord.deleteRecord();
+
       settingsObj.save().then(function() {
+        self.get('model.setting').reload();
+      }).then(function() {
         self.bootstrapAlert("info", `Saved search filter "${item}" deleted.`, 2000);
       });
     },

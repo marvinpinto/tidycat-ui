@@ -220,3 +220,92 @@ test('When the tag filter bar is updated while the saved search bar is not empty
     assert.deepEqual(find('.tag-filter-bar select').val(), ['one', 'two', 'three'], "the tag filter bar contains the correct filters");
   });
 });
+
+test('When a non-active saved search filter is deleted, the key is deleted and removed from the list', function(assert) {
+  assert.expect(5);
+
+  Ember.$.mockjax({
+    status: 200,
+    type: 'PATCH',
+    url: '/testapi/environment/settings/583231',
+    data: function(payload) {
+      var dataObj = JSON.parse(payload);
+      var sf1 = {
+        id: 'my-saved-filter-1',
+        type: 'saved-filters',
+        attributes: {
+          tags: ['one', 'two']
+        }
+      };
+
+      var returnedData = dataObj.data.relationships['saved-filters'].data;
+      assert.equal(dataObj.data.id, "583231");
+      assert.equal(dataObj.data.type, "settings");
+      assert.equal(returnedData.length, 1, "there is one filter in the list");
+
+      var sf1Pos = returnedData.map(function(e) {
+        return e.id;
+      }).indexOf('my-saved-filter-1');
+      assert.ok(sf1Pos >= 0, "the list contains saved-filter-1");
+      assert.deepEqual(returnedData[sf1Pos], sf1, 'The saved-filter-1 objects are identical');
+      return true;
+    },
+    responseText: {
+      meta: {
+        message: 'Success!'
+      }
+    }
+  });
+
+  // Delete 'my-saved-filter-2' from the dropdown list
+  click('.saved-filter-bar .select2-selection');
+  keyEvent('.saved-filter-bar .select2-selection', 'keydown', 32); // spacebar
+  click('.saved-filter-bar .select2-container .select2-results li:last a');
+});
+
+test('When an active saved search filter is deleted, the key is deleted and removed from the list', function(assert) {
+  assert.expect(5);
+
+  Ember.$.mockjax({
+    status: 200,
+    type: 'PATCH',
+    url: '/testapi/environment/settings/583231',
+    data: function(payload) {
+      var dataObj = JSON.parse(payload);
+      var sf1 = {
+        id: 'my-saved-filter-1',
+        type: 'saved-filters',
+        attributes: {
+          tags: ['one', 'two']
+        }
+      };
+
+      var returnedData = dataObj.data.relationships['saved-filters'].data;
+      assert.equal(dataObj.data.id, "583231");
+      assert.equal(dataObj.data.type, "settings");
+      assert.equal(returnedData.length, 1, "there is one filter in the list");
+
+      var sf1Pos = returnedData.map(function(e) {
+        return e.id;
+      }).indexOf('my-saved-filter-1');
+      assert.ok(sf1Pos >= 0, "the list contains saved-filter-1");
+      assert.deepEqual(returnedData[sf1Pos], sf1, 'The saved-filter-1 objects are identical');
+      return true;
+    },
+    responseText: {
+      meta: {
+        message: 'Success!'
+      }
+    }
+  });
+
+  // Choose 'my-saved-filter-2' from the dropdown list
+  click('.saved-filter-bar .select2-selection');
+  keyEvent('.saved-filter-bar .select2-selection', 'keydown', 32); // spacebar
+  click('.saved-filter-bar .select2-container .select2-results li:last');
+
+  // Delete 'my-saved-filter-2' from the dropdown list
+  click('.saved-filter-bar .select2-selection');
+  keyEvent('.saved-filter-bar .select2-selection', 'keydown', 32); // spacebar
+  click('.saved-filter-bar .select2-container .select2-results li:last a');
+});

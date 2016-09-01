@@ -153,7 +153,7 @@ test('In tag mode, a newly added item is also added to the bound-data input list
 
 test('In tag mode, a removed item is also removed from the bound-data input list', function(assert) {
   var self = this;
-  assert.expect(11);
+  assert.expect(10);
   var inputData = ["opt1", "opt2", "opt3"];
   this.set('data', inputData);
   this.render(hbs`{{notification-tags tagmode=true data=data}}`);
@@ -176,10 +176,9 @@ test('In tag mode, a removed item is also removed from the bound-data input list
     self.$('.select2-tag-bar').trigger(e);
 
     assert.equal(self.$('.select2-tag-bar').select2('val'), "opt1,opt3", "all the tags are displayed");
-    assert.equal(self.$('.select2-tag-bar option').size(), 3, "there are two options available");
+    assert.equal(self.$('.select2-tag-bar option').size(), 2, "there are two options available");
     assert.equal(self.$('.select2-tag-bar option:eq(0)').text(), "opt1", "first available option is opt1");
-    assert.equal(self.$('.select2-tag-bar option:eq(1)').text(), "opt2", "second available option is opt2");
-    assert.equal(self.$('.select2-tag-bar option:eq(2)').text(), "opt3", "third available option is opt3");
+    assert.equal(self.$('.select2-tag-bar option:eq(1)').text(), "opt3", "second available option is opt3");
     assert.equal(self.get('data'), "opt1,opt3", "bound data list has been updated");
   });
 });

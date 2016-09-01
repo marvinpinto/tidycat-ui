@@ -17,26 +17,48 @@ export default Ember.Component.extend({
     // list. Basically used as a synchronization mechanism between the inputted
     // data list and what is displayed. This is needed so that when an item is
     // removed from the data list (out of band, e.g. during a revert), this
-    // information is also reflected in the selection list. This only really
-    // makes sense for tagged lists.
+    // information is also reflected in the selection list.
     let self = this;
     let selectList = self.$("#" + self.get('selectComponentId'));
-    if (self.get('tagMode')) {
-      Ember.run.next(function() {
-        // Clear out the stale option values and re-add the new, relevant
-        // values
-        selectList.empty();
-        Ember.$.each(self.get('data'), function(index, item) {
-          selectList.append(new Option(item, item));  // eslint-disable-line no-undef
-        });
+    let currentlySelected = selectList.val();
 
-        // After the available options have been updated, ensure that the
-        // 'selected' options are the ones we need
-        selectList.val(self.get('data')).trigger('change');
-      });
+    // Clear out the stale option values and re-add the new, relevant
+    // values
+    selectList.empty();
+    self.get('data').forEach(function(item) {
+      let mItem = item.id || item;
+      selectList.append(new Option(mItem, mItem));  // eslint-disable-line no-undef
+    });
+
+    // After the available options have been updated, ensure that the
+    // 'selected' options are the ones we need
+    if (self.get('tagMode')) {
+      selectList.val(self.get('data')).trigger('change');
+    } else {
+      selectList.val(currentlySelected).trigger('change');
     }
+
     selectList.select2("close");
   }.observes('data.length'),
+
+  populateInitialEntries: function() {
+    let self = this;
+
+    // This only really applies to dropdown mode
+    if (self.get('tagMode')) {
+      return [];
+    }
+
+    let newArray = Ember.A([]);  // eslint-disable-line new-cap
+    if (self.get('data')) {
+      self.get('data').forEach(function(item) {
+        let mObj = {};
+        mObj.id = mObj.text = item.id || item;
+        newArray.pushObject(mObj);
+      });
+    }
+    return newArray;
+  },
 
   didInsertElement: function() {
     Ember.run.scheduleOnce('afterRender', this, function() {
@@ -89,6 +111,7 @@ export default Ember.Component.extend({
         multiple: self.get('tagMode'),
         allowClear: self.get('allowInputClearing'),
         dropdownParent: $(self.get('select2DropdownParent')),  // eslint-disable-line no-undef
+        data: self.populateInitialEntries(),
 
         formatNoMatches: function() {
           return '';
@@ -113,6 +136,39 @@ export default Ember.Component.extend({
             return match;
           }
           return null;
+        },
+
+        templateResult: function(data) {
+          // The purpose of this is to present a 'delete' icon to the user in
+          // order to allow them to remove/delete a saved-search item.
+
+          if (data.id === null) {
+            return data.text;
+          }
+
+          // The 'delete' icon is only relevant for the saved-search-bar,
+          // therefore only relevant in non-tag mode.
+          if (self.get('tagMode')) {
+            return data.text;
+          }
+
+          let option = Ember.$("<span></span>");
+          let deleteEntry = Ember.$("<a href='javascript:void(0)'><i class='fa fa-fw fa-trash-o' aria-hidden='true'></i></a>");
+          deleteEntry.on('mouseup', function(evt) {
+            // Select2 will remove the dropdown on `mouseup`, which will
+            // prevent any `click` events from being triggered So we need to
+            // block the propagation of the `mouseup` event
+            // Ref: http://stackoverflow.com/a/31904887/1101070
+            evt.stopPropagation();
+          });
+
+          deleteEntry.on('click', {optionId: data.text}, function(evt) {
+            self.sendAction('listItemDeleted', evt.data.optionId);
+          });
+
+          option.text(data.text);
+          option.append(deleteEntry);
+          return option;
         }
 
       });

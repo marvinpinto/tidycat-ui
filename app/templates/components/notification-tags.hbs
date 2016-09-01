@@ -1,8 +1,10 @@
 <div class="form-group has-feedback">
   <select id={{selectComponentId}} class="select2-tag-bar" style="width: 100%" multiple="{{tagMode}}">
+    {{#if tagMode}}
     {{#each initialOptions as |item|}}
       <option value="{{if item.id item.id item}}" selected="{{tagMode}}">{{if item.id item.id item}}</option>
     {{/each}}
+    {{/if}}
   </select>
   <span class="fa fa-lg {{fontAwesomeIcon}} form-control-feedback input-select2-tag-bar" aria-hidden="true"></span>
 </div>
