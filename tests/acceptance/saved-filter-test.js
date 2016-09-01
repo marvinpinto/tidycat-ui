@@ -151,7 +151,7 @@ test('When the tag filter bar is updated while the saved search bar is empty, th
   });
 });
 
-test('When the tag filter bar is updated while the saved search bar is not empty, these values are persisted', function(assert) {
+test('When a new tag is added to the tag filter bar while the saved search bar is not empty, these values are persisted', function(assert) {
   assert.expect(11);
 
   Ember.$.mockjax({
@@ -218,6 +218,73 @@ test('When the tag filter bar is updated while the saved search bar is not empty
   andThen(function() {
     assert.equal(find('.saved-filter-bar select').val(), 'my-saved-filter-1', "'my-saved-filter-1' is the currently selected saved filter");
     assert.deepEqual(find('.tag-filter-bar select').val(), ['one', 'two', 'three'], "the tag filter bar contains the correct filters");
+  });
+});
+
+test('When a tag is removed from the tag filter bar while the saved search bar is not empty, these values are persisted', function(assert) {
+  assert.expect(11);
+
+  Ember.$.mockjax({
+    status: 200,
+    type: 'PATCH',
+    url: '/testapi/environment/settings/583231',
+    data: function(payload) {
+      var dataObj = JSON.parse(payload);
+      var sf1 = {
+        id: 'my-saved-filter-1',
+        type: 'saved-filters',
+        attributes: {
+          tags: ['one']
+        }
+      };
+      var sf2 = {
+        id: 'my-saved-filter-2',
+        type: 'saved-filters',
+        attributes: {
+          tags: ['two', 'three']
+        }
+      };
+
+      var returnedData = dataObj.data.relationships['saved-filters'].data;
+      assert.equal(dataObj.data.id, "583231");
+      assert.equal(dataObj.data.type, "settings");
+      assert.equal(returnedData.length, 2, "there are three saved filters in the list");
+
+      var sf1Pos = returnedData.map(function(e) {
+        return e.id;
+      }).indexOf('my-saved-filter-1');
+      assert.ok(sf1Pos >= 0, "the list contains saved-filter-1");
+      assert.deepEqual(returnedData[sf1Pos], sf1, 'The saved-filter-1 objects are identical');
+
+      var sf2Pos = returnedData.map(function(e) {
+        return e.id;
+      }).indexOf('my-saved-filter-2');
+      assert.ok(sf2Pos >= 0, "the list contains saved-filter-2");
+      assert.deepEqual(returnedData[sf2Pos], sf2, 'The saved-filter-2 objects are identical');
+      return true;
+    },
+    responseText: {
+      meta: {
+        message: 'Success!'
+      }
+    }
+  });
+
+  // Choose 'my-saved-filter-1' from the dropdown list
+  click('.saved-filter-bar .select2-selection');
+  keyEvent('.saved-filter-bar .select2-selection', 'keydown', 32); // spacebar
+  click('.saved-filter-bar .select2-container .select2-results li:first');
+
+  andThen(function() {
+    assert.equal(find('.saved-filter-bar select').val(), 'my-saved-filter-1', "'my-saved-filter-1' is the currently selected saved filter");
+    assert.deepEqual(find('.tag-filter-bar select').val(), ['one', 'two'], "the tag filter bar contains the correct filters");
+  });
+
+  // Remove filter 'two' from the filter list
+  click('.tag-filter-bar .select2-selection__choice[title="two"] .select2-selection__choice__remove');
+  andThen(function() {
+    assert.equal(find('.saved-filter-bar select').val(), 'my-saved-filter-1', "'my-saved-filter-1' is the currently selected saved filter");
+    assert.deepEqual(find('.tag-filter-bar select').val(), ['one'], "the tag filter bar contains the correct filters");
   });
 });
 

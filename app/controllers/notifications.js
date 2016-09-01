@@ -101,7 +101,7 @@ export default Ember.Controller.extend({
     // 1. A brand new saved search filter is entered (save all the current filtered tags under this brand new key)
     // 2. An already-present search filter is selected (replace all the currently filtered tags with this key's values)
     // 3. The saved search filter bar is cleared (clear the values in the filtered tags bar)
-    // 4. A non-active saved search filter is deleted (remove it from the list and delete the key)
+    // 4. A saved search filter is deleted (remove it from the list and delete the key)
 
     saveFilterAdded: function(item) {
       let settingsObj = this.get('store').peekRecord('setting', this.get('model.user.id'));
@@ -142,7 +142,7 @@ export default Ember.Controller.extend({
     },
 
     saveFilterDeleted: function(item) {
-      // A non-active saved-search filter is deleted (case #4 above)
+      // A saved-search filter is deleted (case #4 above)
       console.debug(`Will now delete search filter "${item}" from the list`);
       let settingsObj = this.get('store').peekRecord('setting', this.get('model.user.id'));
       let tFilterRecord = this.get('store').peekRecord('savedFilter', item);
