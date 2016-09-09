@@ -34,6 +34,7 @@ server: clean ## Run the ember server locally
 		EMBER_ESA_TOKEN_ENDPOINT="http://127.0.0.1:8080/auth/token" \
 		EMBER_ESA_REFRESH_ENDPOINT="http://127.0.0.1:8080/auth/refresh" \
 		EMBER_NOTIFICATION_ENDPOINT="http://127.0.0.1:8081/notification" \
+		EMBER_ENVIRONMENT_ENDPOINT="http://127.0.0.1:8082/environment" \
 		ember server \
 		--environment="development" \
 		--live-reload=false
@@ -45,6 +46,7 @@ build-staging: clean ## Build the staging version of the ember app
 		EMBER_ESA_TOKEN_ENDPOINT="https://api-staging.tidycat.io/auth/token" \
 		EMBER_ESA_REFRESH_ENDPOINT="https://api-staging.tidycat.io/auth/refresh" \
 		EMBER_NOTIFICATION_ENDPOINT="https://api-staging.tidycat.io/notification" \
+		EMBER_ENVIRONMENT_ENDPOINT="https://api-staging.tidycat.io/environment" \
 		ember build \
 		--environment production \
 		--output-path dist/
@@ -57,6 +59,7 @@ build-production: clean ## Build the production version of the ember app
 		EMBER_ESA_TOKEN_ENDPOINT="https://api.tidycat.io/auth/token" \
 		EMBER_ESA_REFRESH_ENDPOINT="https://api.tidycat.io/auth/refresh" \
 		EMBER_NOTIFICATION_ENDPOINT="https://api.tidycat.io/notification" \
+		EMBER_ENVIRONMENT_ENDPOINT="https://api.tidycat.io/environment" \
 		ember build \
 		--environment production \
 		--output-path dist/

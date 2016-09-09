@@ -6,6 +6,7 @@ export default Ember.Controller.extend({
   store: Ember.inject.service('store'),
   newNotifications: Ember.inject.service('new-notification'),
   filterTags: [],
+  currentlySelectedSavedFilter: null,
 
   initiateNotificationChecking: function() {
     if (this.get('session.data.authenticated.token')) {
@@ -94,7 +95,107 @@ export default Ember.Controller.extend({
       this.get('store').query('thread', {from: fromDate}).then(function(threads) {
         self.set('model.thread', threads);
       });
+    },
+
+    // Events driven via the Saved Search Filter dropdown
+    // 1. A brand new saved search filter is entered (save all the current filtered tags under this brand new key)
+    // 2. An already-present search filter is selected (replace all the currently filtered tags with this key's values)
+    // 3. The saved search filter bar is cleared (clear the values in the filtered tags bar)
+    // 4. A saved search filter is deleted (remove it from the list and delete the key)
+
+    saveFilterAdded: function(item) {
+      let settingsObj = this.get('store').peekRecord('setting', this.get('model.user.id'));
+      let tFilterRecord = this.get('store').peekRecord('savedFilter', item);
+      let self = this;
+
+      // Note the currently selected saved filter item
+      self.set('currentlySelectedSavedFilter', item);
+
+      // The (newly) selected search filter is *not* brand new (case #2 above)
+      if (tFilterRecord) {
+        console.debug(`Filter ${item} already exists - replacing tag bar contents`);
+        this.set('filterTags', []);
+        this.set('filterTags', tFilterRecord.get('tags', []));
+        return;
+      }
+
+      // This is a brand new search filter (case #1 above)
+      console.debug(`Filter ${item} is brand new!`);
+      let newFilter = this.get('store').createRecord('savedFilter', {
+        id: item,
+        tags: this.get('filterTags', [])
+      });
+      settingsObj.get('savedFilters').pushObject(newFilter);
+      settingsObj.save().then(function() {
+        self.bootstrapAlert("info", `Saved search filter "${item}" created.`, 2000);
+      });
+    },
+
+    saveFilterRemoved: function() {
+      // The saved-search bar is cleared (case #3 above)
+
+      // Clear the currently selected saved filter item
+      this.set('currentlySelectedSavedFilter', null);
+
+      console.debug("The saved-search bar has been cleared");
+      this.set('filterTags', []);
+    },
+
+    saveFilterDeleted: function(item) {
+      // A saved-search filter is deleted (case #4 above)
+      console.debug(`Will now delete search filter "${item}" from the list`);
+      let settingsObj = this.get('store').peekRecord('setting', this.get('model.user.id'));
+      let tFilterRecord = this.get('store').peekRecord('savedFilter', item);
+      let self = this;
+      tFilterRecord.deleteRecord();
+
+      settingsObj.save().then(function() {
+        self.get('model.setting').reload();
+      }).then(function() {
+        self.bootstrapAlert("info", `Saved search filter "${item}" deleted.`, 2000);
+      });
+    },
+
+    // Events driven via the Tag Filter bar
+    // 1. Saved filter bar is empty + tags are added/removed from the tag bar (do not save these search filters)
+    // 2. Saved filter bar is not empty  + tags are added/removed from the tag bar (save these tags to the saved search filter key)
+
+    filterTagAdded: function(item) {
+      // Do not bother saving any saved-filters if the saved-filter-bar is
+      // empty (case #1 above)
+      let self = this;
+      if (!this.get('currentlySelectedSavedFilter')) {
+        return;
+      }
+
+      // Save the added tag to the relevant saved-filter-bar key (case #2 above)
+      console.debug(`Adding tag "${item}" to the tag list for ${this.get('currentlySelectedSavedFilter')}`);
+      let settingsObj = this.get('store').peekRecord('setting', this.get('model.user.id'));
+      let filterRecord = this.get('store').peekRecord('savedFilter', this.get('currentlySelectedSavedFilter'));
+      filterRecord.get('tags').pushObject(item);
+      settingsObj.save().then(function() {
+        self.bootstrapAlert("info", `Tag "${item}" saved with search filter "${self.get('currentlySelectedSavedFilter')}"`, 2000);
+      });
+    },
+
+    filterTagRemoved: function(item) {
+      // Do not bother saving any saved-filters if the saved-filter-bar is
+      // empty (case #1 above)
+      let self = this;
+      if (!this.get('currentlySelectedSavedFilter')) {
+        return;
+      }
+
+      // Remove the added tag from the relevant saved-filter-bar key (case #2 above)
+      console.debug(`Removing tag "${item}" from the tag list for ${this.get('currentlySelectedSavedFilter')}`);
+      let settingsObj = this.get('store').peekRecord('setting', this.get('model.user.id'));
+      let filterRecord = this.get('store').peekRecord('savedFilter', this.get('currentlySelectedSavedFilter'));
+      filterRecord.get('tags').removeObject(item);
+      settingsObj.save().then(function() {
+        self.bootstrapAlert("info", `Tag "${item}" removed from search filter "${self.get('currentlySelectedSavedFilter')}"`, 2000);
+      });
     }
+
   },
 
   revertDirtyModel: function() {
@@ -147,4 +248,5 @@ export default Ember.Controller.extend({
       });  // end filters.every
     });  // end model.thread
   })
+
 });

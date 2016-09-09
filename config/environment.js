@@ -56,6 +56,11 @@ module.exports = function(environment) {
     'notification-api': {
       host: process.env.EMBER_NOTIFICATION_ENDPOINT,
       namespace: ''
+    },
+
+    'environment-api': {
+      host: process.env.EMBER_ENVIRONMENT_ENDPOINT,
+      namespace: ''
     }
 
   };
@@ -75,6 +80,7 @@ module.exports = function(environment) {
     ENV['github-api'].host = '/testapi/github';
     ENV['ember-simple-auth-token'].refreshAccessTokens = false;
     ENV['notification-api'].host = '/testapi/notification';
+    ENV['environment-api'].host = '/testapi/environment';
   }
 
   // *************

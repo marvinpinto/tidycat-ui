@@ -109,6 +109,55 @@ export default function(name, options = {}) {
         }
       });
 
+      $.mockjax({
+        status: 200,
+        type: 'GET',
+        url: '/testapi/environment/settings/583231',
+        dataType: 'json',
+        responseText: {
+          data: {
+            type: "settings",
+            id: 583231,
+            relationships: {
+              'saved-filters': {
+                data: [
+                  {
+                    id: 'my-saved-filter-1',
+                    type: 'saved-filter',
+                    attributes: {
+                      tags: ['one', 'two']
+                    }
+                  },
+                  {
+                    id: 'my-saved-filter-2',
+                    type: 'saved-filter',
+                    attributes: {
+                      tags: ['two', 'three']
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          included: [
+            {
+              id: 'my-saved-filter-1',
+              type: 'saved-filter',
+              attributes: {
+                tags: ['one', 'two']
+              }
+            },
+            {
+              id: 'my-saved-filter-2',
+              type: 'saved-filter',
+              attributes: {
+                tags: ['two', 'three']
+              }
+            }
+          ]
+        }
+      });
+
       // Apply any additional pre-test options supplied via the test runner
       if (options.beforeEach) {
         options.beforeEach.apply(this, arguments);

@@ -29,17 +29,25 @@
       tagmode=true
       allowClear=true
       data=filterTags
+      itemAdded="filterTagAdded"
+      itemRemoved="filterTagRemoved"
+      select2DropdownParent=".tag-filter-bar"
       }}
     </div>
 
     <!-- Saved filters -->
-    <div class="col-md-3">
+    <div class="col-md-3 saved-filter-bar">
       {{
       notification-tags
       fontAwesomeIcon="fa-search"
       placeholder="Saved search filters"
       tagmode=false
       allowClear=true
+      data=model.setting.savedFilters
+      itemAdded="saveFilterAdded"
+      itemRemoved="saveFilterRemoved"
+      listItemDeleted="saveFilterDeleted"
+      select2DropdownParent=".saved-filter-bar"
       }}
     </div>
 
