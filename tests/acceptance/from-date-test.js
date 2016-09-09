@@ -23,7 +23,11 @@ test('The initially displayed from-date is set to a week ago', function(assert) 
       'November',
       'December'
     ];
-    var dateStr = `${months[oneWeekAgo.getMonth()]} ${oneWeekAgo.getDate()}, ${oneWeekAgo.getFullYear()}`;
+    var day = oneWeekAgo.getDate();
+    if (day <= 9) {
+      day = '0' + day;
+    }
+    var dateStr = `${months[oneWeekAgo.getMonth()]} ${day}, ${oneWeekAgo.getFullYear()}`;
     assert.equal(find('.from-date-picker').val(), dateStr);
   });
 });
